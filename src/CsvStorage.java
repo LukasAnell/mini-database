@@ -26,7 +26,7 @@ public class CsvStorage {
 					Object value = currentRow.getValue(j);
 
 					writer.write(value.toString());
-					if (i < currentRow.size() - 1) {
+					if (j < currentRow.size() - 1) {
 						writer.write(",");
 					}
 				}
