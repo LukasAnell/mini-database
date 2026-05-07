@@ -1,0 +1,5 @@
+id:INTEGER,name:STRING,gpa:DOUBLE
+1,Alice,3.9
+2,Bob,3.4
+3,Joe,2.4
+4,Jeff,1.1
