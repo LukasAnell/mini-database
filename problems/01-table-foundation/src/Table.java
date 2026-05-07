@@ -1,6 +1,5 @@
 import java.util.List;
 import java.util.ArrayList;
-import java.lang.IllegalArgumentException;
 
 public class Table {
 	private String name;
@@ -35,12 +34,12 @@ public class Table {
 	public void printTable() {
 		System.out.printf("Table: %s\n", name);
 
-		String columnHeader = "";
+		StringBuilder columnHeader = new StringBuilder();
 		for (Column col : columns) {
-			columnHeader += (col.toString() + " | "); 
+			columnHeader.append(col.toString()).append(" | ");
 		}
-		// remove extra " | "
-		columnHeader = columnHeader.substring(0, columnHeader.length() - 3);
+		// trim last separator
+		columnHeader.setLength(columnHeader.length() - 3);
 		System.out.println(columnHeader);
 
 		String spacer = "--";

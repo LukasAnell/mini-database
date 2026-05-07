@@ -23,6 +23,10 @@ public class Main {
 		table.printTable();
 
 		List<Object> row5 = List.of(5, "Joe", 4.9, "Mathematics");
-		table.addRow(new Row(row5));
+		try {
+			table.addRow(new Row(row5));
+		} catch (IllegalArgumentException e) {
+			System.out.println("Caught expected error: row size mismatch");
+		}
 	}
 }
