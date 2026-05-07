@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class QueryParser {
@@ -37,17 +38,40 @@ public class QueryParser {
 		int whereIndex = getKeywordIndex(splitQuery, "WHERE");
 		if (whereIndex == -1) {
 			// no WHERE keyword, grab every entry from requested columns
+			// 
+		} else {
+			// contains WHERE, create Condition object and find rows that adhere to condition
 			String[] whereCondition = new String[3];
 			System.arraycopy(splitQuery, whereIndex, whereCondition, 0, 3);
-			Condition condition = new Condition(whereCondition[0], whereCondition[1], whereCondition[2]);
-
+			Condition condition = new Condition(whereCondition[0], whereCondition[1], whereCondition[2]); // columnName, operator, value
 
 			List<Row> rows = table.getRows();
 
-			
-		} else {
-			// contains WHERE, create Condition object and find rows that adhere to condition
+			int conditionColIndex = getColumnIndex(table.getColumns(), condition.getColumnName());
 
+			List<Row> result = new ArrayList<>();
+			for (int i = 0; i < rows.size(); i++) {
+				
+				Row currentRow = rows.get(i);
+				Object rowColValue = currentRow.getValue(conditionColIndex);
+				// check if value of row at column name would return true for condition
+				switch (condition.getOperator()) {
+					case "=":
+						if (rowColValue.equals(condition.getValue())) {
+							// make new row from earlier desired columns, add to result
+							Row selectedValuesRow = getSelectedColumns(table.getColumns(), desiredColumns, currentRow);
+							// add row to result
+							result.add(selectedValuesRow);
+						}
+						break;
+					case "<":
+
+						break;
+					case ">":
+
+						break;
+				}
+			}
 		}
 
 		return null;
@@ -76,5 +100,34 @@ public class QueryParser {
 		}
 
 		return -1;
+	}
+
+	private static int getColumnIndex(List<Column> columns, String columnName) {
+		for (int i = 0; i < columns.size(); i++) {
+			if (columns.get(i).getName().equals(columnName)) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	private static Row getSelectedColumns(List<Column> columns, String[] selectedColumns, Row row) {
+		// check if * was selected
+		if (selectedColumns[0] == "*") {
+			return row;
+		}
+
+		int[] columnIndices = new int[selectedColumns.length];
+		for (int i = 0; i < selectedColumns.length; i++) {
+			columnIndices[i] = getColumnIndex(columns, selectedColumns[i]);
+		}
+
+		List<Object> values = new ArrayList<>();
+		for (int index : columnIndices) {
+			values.add(row.getValue(index));
+		}
+
+		return new Row(values);
 	}
 }
