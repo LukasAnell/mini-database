@@ -11,7 +11,7 @@ public class Row {
 		return values.get(index);
 	}
 
-	int size() {
+	public int size() {
 		return values.size();
 	}
 
