@@ -97,6 +97,8 @@ public class CsvStorage {
 				// make a Row object out of values, then add to table
 				table.addRow(new Row(values));
 			}
+
+			return table;
 		} catch (IOException e) {
 			throw e;
 		}
