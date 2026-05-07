@@ -33,8 +33,6 @@ public class CsvStorage {
 
 				writer.newLine();
 			}
-		} catch (IOException e) {
-			throw e;
 		}
 	}
 
@@ -73,23 +71,12 @@ public class CsvStorage {
 					String value = sep[i];
 
 					// convert value to be type
-					Object convertedValue = null;
-					switch (type) {
-						case STRING:
-							convertedValue = value;
-							break;
-						case INTEGER:
-							convertedValue = Integer.parseInt(value);
-							break;
-						case DOUBLE:
-							convertedValue = Double.parseDouble(value);
-							break;
-						case BOOLEAN:
-							convertedValue = Boolean.parseBoolean(value);
-							break;
-						default:
-							convertedValue = value;
-					}
+					Object convertedValue = switch (type) {
+						case STRING  -> value;
+						case INTEGER -> Integer.parseInt(value);
+						case DOUBLE  -> Double.parseDouble(value);
+						case BOOLEAN -> Boolean.parseBoolean(value);
+					};
 
 					values.add(convertedValue);
 				}
@@ -99,8 +86,6 @@ public class CsvStorage {
 			}
 
 			return table;
-		} catch (IOException e) {
-			throw e;
 		}
 	}
 }
