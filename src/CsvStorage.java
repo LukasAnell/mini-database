@@ -1,9 +1,13 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CsvStorage {
-	public static void saveTable(Table table, String filePath) {
+	public static void saveTable(Table table, String filePath) throws IOException {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 			List<Column> columns = table.getColumns();
 			// loop through columns, .toString() for each one
@@ -29,8 +33,8 @@ public class CsvStorage {
 
 				writer.newLine();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw e;
 		}
 	}
 
