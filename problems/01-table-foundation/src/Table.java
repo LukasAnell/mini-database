@@ -1,10 +1,11 @@
 import java.util.List;
+import java.util.ArrayList;
 import java.lang.IllegalArgumentException;
 
 public class Table {
 	private String name;
 	private List<Column> columns;
-	private List<Row> rows;
+	private List<Row> rows = new ArrayList<>();
 
 	public Table(String name, List<Column> columns) {
 		this.name = name;
@@ -39,7 +40,7 @@ public class Table {
 			columnHeader += (col.toString() + " | "); 
 		}
 		// remove extra " | "
-		columnHeader.substring(0, columnHeader.length() - 3);
+		columnHeader = columnHeader.substring(0, columnHeader.length() - 3);
 		System.out.println(columnHeader);
 
 		String spacer = "--";
@@ -57,7 +58,7 @@ public class Table {
 				
 				// length of current column's header
 				// so we can add spaces to entry, so it lines up
-				int headerLength = columns.get(j).getName().length();
+				int headerLength = columns.get(j).toString().length();
 				String spaces = "";
 				for (int k = 0; k < headerLength - currentValue.toString().length(); k++) {
 					spaces += " ";
