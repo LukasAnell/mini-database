@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QueryParser {
-	public static QueryResult execute(String query, Table table) {
+	public QueryResult execute(String query, Table table) {
 		// keywords: SELECT _ FROM, WHERE, INSERT INTO, VALUES, DELETE FROM
 		switch (query.split(" ")[0].toUpperCase()) {
 			case "SELECT":
@@ -19,7 +19,7 @@ public class QueryParser {
 		}
 	}
 
-	private static QueryResult caseSelect(String query, Table table) {
+	private QueryResult caseSelect(String query, Table table) {
 		String[] splitQuery = query.split(" ");
 
 		// find where FROM is, then grab the term(s) between SELECT and FROM
@@ -38,7 +38,7 @@ public class QueryParser {
 		int whereIndex = getKeywordIndex(splitQuery, "WHERE");
 		if (whereIndex == -1) {
 			// no WHERE keyword, grab every entry from requested columns
-			// 
+			return null; 
 		} else {
 			// contains WHERE, create Condition object and find rows that adhere to condition
 			String[] whereCondition = new String[3];
@@ -92,29 +92,31 @@ public class QueryParser {
 						}
 
 						break;
-				}
+				}				
 			}
+
+			String message = String.format("%d row(s) selected");
+
+			return new QueryResult(result, message);
 		}
+	}
+
+	private QueryResult caseWhere(String query, Table table) {
 
 		return null;
 	}
 
-	private static QueryResult caseWhere(String query, Table table) {
+	private QueryResult caseInsert(String query, Table table) {
 
 		return null;
 	}
 
-	private static QueryResult caseInsert(String query, Table table) {
+	private QueryResult caseDelete(String query, Table table) {
 
 		return null;
 	}
 
-	private static QueryResult caseDelete(String query, Table table) {
-
-		return null;
-	}
-
-	private static int getKeywordIndex(String[] splitQuery, String keyword) {
+	private int getKeywordIndex(String[] splitQuery, String keyword) {
 		for (int i = 0; i < splitQuery.length; i++) {
 			if (splitQuery[i].equalsIgnoreCase(keyword)) {
 				return i;
@@ -124,7 +126,7 @@ public class QueryParser {
 		return -1;
 	}
 
-	private static int getColumnIndex(List<Column> columns, String columnName) {
+	private int getColumnIndex(List<Column> columns, String columnName) {
 		for (int i = 0; i < columns.size(); i++) {
 			if (columns.get(i).getName().equals(columnName)) {
 				return i;
@@ -134,7 +136,7 @@ public class QueryParser {
 		return -1;
 	}
 
-	private static Row getSelectedColumns(List<Column> columns, String[] selectedColumns, Row row) {
+	private Row getSelectedColumns(List<Column> columns, String[] selectedColumns, Row row) {
 		// check if * was selected
 		if (selectedColumns[0] == "*") {
 			return row;
