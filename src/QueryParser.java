@@ -65,9 +65,31 @@ public class QueryParser {
 						}
 						break;
 					case "<":
+						// check if col is INTEGER or DOUBLE
+						try {
+							if (((Integer) rowColValue) < (Integer.valueOf(condition.getValue()))) {
+								// make new row from earlier desired columns, add to result
+								Row selectedValuesRow = getSelectedColumns(table.getColumns(), desiredColumns, currentRow);
+								// add row to result
+								result.add(selectedValuesRow);
 
+							}
+						} catch (IllegalArgumentException e) {
+							throw e;
+						}
 						break;
 					case ">":
+						try {
+							if (((Integer) rowColValue) < (Integer.valueOf(condition.getValue()))) {
+								// make new row from earlier desired columns, add to result
+								Row selectedValuesRow = getSelectedColumns(table.getColumns(), desiredColumns, currentRow);
+								// add row to result
+								result.add(selectedValuesRow);
+
+							}
+						} catch (IllegalArgumentException e) {
+							throw e;
+						}
 
 						break;
 				}
