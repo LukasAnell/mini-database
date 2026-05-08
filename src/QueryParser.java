@@ -18,6 +18,50 @@ public class QueryParser {
 	}
 
 	private QueryResult caseSelect(String query, Table table) {
+		// save for keyword parsing
+		String queryUpper = query.toUpperCase();
+
+		// does WHERE exist?
+		boolean hasWhere = queryUpper.contains("WHERE");
+
+		// get column list
+		// (between SELECT and FROM)
+		String columnListStr = query.substring(7, queryUpper.indexOf("WHERE") - 1);
+		String[] columnList = { "*" };
+		if (!columnListStr.equals("*")) {
+			columnList = columnListStr.split(", ");
+		}
+
+		// if hasWhere, turn it into a condition object
+		Condition whereCondition = null;
+		if (hasWhere) {
+			whereCondition = getWhereCondition(query);
+		}
+
+		// loop through every row in table
+		List<Row> rows = table.getRows();
+
+		// list of collected rows
+		List<Row> collectedRows = new ArrayList<>();
+		for (int i = 0; i < rows.size(); i++) {
+			Row row = rows.get(i);
+			
+			// if there's a condition, test the row against it
+			boolean passes = true;
+			if (whereCondition != null) {
+				// test current row against condition
+				passes = testRow(row, whereCondition, table.getColumns());
+			}
+
+			// if it passes, build a new Row with the requested columns' values
+			// will also run with no condition
+			if (passes) {
+				Row collectedRow = getRequestedColumns(columnList, row, table.getColumns());
+			}
+		}
+
+		// return QueryResult object
+
 		return null;
 	}	
 
@@ -94,5 +138,25 @@ public class QueryParser {
 
 		// compare with =
 		return c1.compareTo(conditionValueCasted) == 0;
+	}
+
+	private Row getRequestedColumns(String[] requestedColumns, Row row, List<Column> columns) {
+		// find which indices each entry in requestedColumns is at in columns
+		List<Integer> indices = new ArrayList<>();
+		for (int i = 0; i < requestedColumns.length; i++) {
+			String tableColumnName = columns.get(i).getName();
+			if (requestedColumns[i].equals(tableColumnName)) {
+				indices.add(i);
+			}
+		}
+
+		// create list of requested values by getting value of row at each index
+		List<Object> values = new ArrayList<>();
+		for (int index : indices) {
+			Object value = row.getValue(index);
+			values.add(value);
+		}
+
+		return new Row(values);
 	}
 }
