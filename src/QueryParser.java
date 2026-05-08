@@ -24,9 +24,14 @@ public class QueryParser {
 		// does WHERE exist?
 		boolean hasWhere = queryUpper.contains("WHERE");
 
+		if (!queryUpper.contains("FROM")) {
+			throw new IllegalArgumentException();
+		}
+
 		// get column list
 		// (between SELECT and FROM)
-		String columnListStr = query.substring(7, queryUpper.indexOf("WHERE") - 1);
+		String columnListStr = query.substring(6, queryUpper.indexOf("FROM") - 1).trim();
+
 		String[] columnList = { "*" };
 		if (!columnListStr.equals("*")) {
 			columnList = columnListStr.split(", ");
@@ -73,7 +78,7 @@ public class QueryParser {
 		int valuesIndex = queryUpper.indexOf("VALUES");
 		
 		// split by ", " for each raw String value, trim whitespace
-		String[] rowValues = query.substring(valuesIndex + 7).trim().split(", ");
+		String[] rowValues = query.substring(valuesIndex + 6).trim().split(", ");
 
 		// use table.getColumns() to find DataType for each column,
 		// then cast each value to DataType
@@ -136,12 +141,14 @@ public class QueryParser {
 				collectedRows.add(row);
 			}
 		}
+
+		int deletedCount = table.getRows().size() - collectedRows.size();
 		
 		// remove matching rows from the table
 		table.setRows(collectedRows);
 		
 		// return QueryResult object with empty row list and message saying how many removed
-		String message = String.format("%d row(s) deleted", collectedRows.size());
+		String message = String.format("%d row(s) deleted", deletedCount);
 		return new QueryResult(new ArrayList<Row>(), message);	
 	}
 
@@ -149,12 +156,12 @@ public class QueryParser {
 		// condition structure: colName op value
 		
 		// get substring of only condition
-		String conditionStr = query.substring(query.toUpperCase().indexOf("WHERE") + 6);
+		String conditionStr = query.substring(query.toUpperCase().indexOf("WHERE") + 5);
 
 		// check which operator there is
 		String operator;
-		if (conditionStr.contains("+")) {
-			operator = "+";
+		if (conditionStr.contains("=")) {
+			operator = "=";
 		} else if (conditionStr.contains(">")) {
 			operator = ">";
 		} else {
@@ -162,7 +169,7 @@ public class QueryParser {
 		}
 
 		// get colName and value
-		String[] values = conditionStr.split(operator);
+		String[] values = conditionStr.split("\\" + operator);
 
 		return new Condition(values[0].strip(), operator, values[1].strip());
 	}
@@ -179,10 +186,17 @@ public class QueryParser {
 		
 		// get value from row at index
 		Object rowValue = row.getValue(index);
-		
-		// cast condition's value to correct type based on column's DataType
-		Class<?> targetType = columns.get(index).getType().getClass();
-		Object conditionValueCasted = targetType.cast(condition.getValue());
+
+		DataType type = columns.get(index).getType();
+		String conditionValueStr = condition.getValue();
+
+		// convert value to DataType
+		Object conditionValueCasted = switch (type) {
+			case STRING  -> conditionValueStr;
+			case INTEGER -> Integer.parseInt(conditionValueStr);
+			case DOUBLE  -> Double.parseDouble(conditionValueStr);
+			case BOOLEAN -> Boolean.parseBoolean(conditionValueStr);
+		};
 
 		// check if rowValue and conditionValueCasted can be Compared
 		if (!(rowValue instanceof Comparable && conditionValueCasted instanceof Comparable)) {
@@ -196,7 +210,7 @@ public class QueryParser {
 		
 		// compare using =, >, <
 		// (for STRING and BOOLEAN, only use =)
-		if (targetType == Integer.class || targetType == Double.class) {
+		if (type == DataType.INTEGER || type == DataType.DOUBLE) {
 			// compare with >, <
 			switch (condition.getOperator()) {
 				case ">":
@@ -211,23 +225,26 @@ public class QueryParser {
 	}
 
 	private Row getRequestedColumns(String[] requestedColumns, Row row, List<Column> columns) {
-		// find which indices each entry in requestedColumns is at in columns
-		List<Integer> indices = new ArrayList<>();
-		for (int i = 0; i < requestedColumns.length; i++) {
-			String tableColumnName = columns.get(i).getName();
-			if (requestedColumns[i].equals(tableColumnName)) {
-				indices.add(i);
+		List<Object> values = new ArrayList<>();
+
+		// if *, return all columns
+		if (requestedColumns.length == 1 && requestedColumns[0].equals("*")) {
+			for (int i = 0; i < row.size(); i++) {
+				values.add(row.getValue(i));
+			}
+
+			return new Row(values);
+		}
+
+		// for each requested column name, find its index in the table's column list
+		for (String requestedColumn : requestedColumns) {
+			for (int i = 0; i < columns.size(); i++) {
+				if (requestedColumn.trim().equals(columns.get(i).getName())) {
+					values.add(row.getValue(i));
+				}
 			}
 		}
 
-		// create list of requested values by getting value of row at each index
-		List<Object> values = new ArrayList<>();
-		for (int index : indices) {
-			Object value = row.getValue(index);
-			values.add(value);
-		}
-
-		// construct Row object with values
 		return new Row(values);
 	}
 }
