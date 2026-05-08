@@ -67,8 +67,40 @@ public class QueryParser {
 	}	
 
 	private QueryResult caseInsert(String query, Table table) {
+		String queryUpper = query.toUpperCase();
 
-		return null;
+		// find where VALUES keyword is, take everything after it as arguments
+		int valuesIndex = queryUpper.indexOf("VALUES");
+		
+		// split by ", " for each raw String value, trim whitespace
+		String[] rowValues = query.substring(valuesIndex + 7).trim().split(", ");
+
+		// use table.getColumns() to find DataType for each column,
+		// then cast each value to DataType
+		List<Object> values = new ArrayList<>();
+		for (int i = 0; i < rowValues.length; i++) {
+			DataType type = table.getColumns().get(i).getType();
+
+			String value = rowValues[i];
+
+			// convert value to be type
+			Object convertedValue = switch (type) {
+				case STRING  -> value;
+				case INTEGER -> Integer.parseInt(value);
+				case DOUBLE  -> Double.parseDouble(value);
+				case BOOLEAN -> Boolean.parseBoolean(value);
+			};
+
+			values.add(convertedValue);
+		}
+
+		// build row from converted values
+		// add to table
+		table.addRow(new Row(values));
+		
+		// return QueryResult with an empty row list and the insert message
+		String message = "1 row(s) inserted";
+		return new QueryResult(new ArrayList<Row>(), message);
 	}
 
 	private QueryResult caseDelete(String query, Table table) {
