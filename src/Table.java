@@ -31,6 +31,10 @@ public class Table {
 		return rows;
 	}
 
+	public void setRows(List<Row> rows) {
+		this.rows = new ArrayList<>(rows);
+	}
+
 	public void printTable() {
 		System.out.printf("Table: %s\n", name);
 

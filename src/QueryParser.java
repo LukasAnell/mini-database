@@ -104,8 +104,45 @@ public class QueryParser {
 	}
 
 	private QueryResult caseDelete(String query, Table table) {
+		String queryUpper = query.toUpperCase();
 
-		return null;
+		// does WHERE exist?
+		boolean hasWhere = queryUpper.contains("WHERE");
+
+		// if hasWhere, turn it into a condition object
+		Condition whereCondition = null;
+		if (hasWhere) {
+			whereCondition = getWhereCondition(query);
+		}
+
+		// loop through every row in table
+		List<Row> rows = table.getRows();
+
+		// list of collected rows
+		List<Row> collectedRows = new ArrayList<>();
+		for (int i = 0; i < rows.size(); i++) {
+			Row row = rows.get(i);
+			
+			// if there's a condition, test the row against it
+			boolean passes = true;
+			if (whereCondition != null) {
+				// test current row against condition
+				passes = testRow(row, whereCondition, table.getColumns());
+			}
+
+			// if doesn't pass, add to collectedRows
+			// 
+			if (!passes) {
+				collectedRows.add(row);
+			}
+		}
+		
+		// remove matching rows from the table
+		table.setRows(collectedRows);
+		
+		// return QueryResult object with empty row list and message saying how many removed
+		String message = String.format("%d row(s) deleted", collectedRows.size());
+		return new QueryResult(new ArrayList<Row>(), message);	
 	}
 
 	private Condition getWhereCondition(String query) {
