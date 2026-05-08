@@ -57,12 +57,13 @@ public class QueryParser {
 			// will also run with no condition
 			if (passes) {
 				Row collectedRow = getRequestedColumns(columnList, row, table.getColumns());
+				collectedRows.add(collectedRow);
 			}
 		}
 
 		// return QueryResult object
-
-		return null;
+		String message = String.format("%d row(s) selected", collectedRows.size());
+		return new QueryResult(collectedRows, message);
 	}	
 
 	private QueryResult caseInsert(String query, Table table) {
@@ -157,6 +158,7 @@ public class QueryParser {
 			values.add(value);
 		}
 
+		// construct Row object with values
 		return new Row(values);
 	}
 }
