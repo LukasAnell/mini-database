@@ -105,7 +105,7 @@ public class QueryParser {
 		
 		// return QueryResult with an empty row list and the insert message
 		String message = "1 row(s) inserted";
-		return new QueryResult(new ArrayList<Row>(), message);
+		return new QueryResult(new ArrayList<>(), message);
 	}
 
 	private QueryResult caseDelete(String query, Table table) {
@@ -149,7 +149,7 @@ public class QueryParser {
 		
 		// return QueryResult object with empty row list and message saying how many removed
 		String message = String.format("%d row(s) deleted", deletedCount);
-		return new QueryResult(new ArrayList<Row>(), message);	
+		return new QueryResult(new ArrayList<>(), message);	
 	}
 
 	private Condition getWhereCondition(String query) {
@@ -182,6 +182,10 @@ public class QueryParser {
 				index = i;
 				break;
 			}
+		}
+
+		if (index == -1) {
+			throw new IllegalArgumentException();
 		}
 		
 		// get value from row at index
