@@ -8,23 +8,27 @@ public class HashIndex {
 
 	public HashIndex(String columnName, Table table) {
 		this.columnName = columnName;
+		this.index = new HashMap<>();
+
+		// find columnIndex
+		int columnIndex = -1;
+		for (int i = 0; i < table.getColumns().size(); i++) {
+			if (table.getColumns().get(i).getName().equals(columnName)) {
+				columnIndex = i;
+				break;
+			}
+		}
+
 
 		// build index from table's rows
-		List<Row> rows = table.getRows();
-		for (Row row : rows) {
-			// for each row, loop through values and add to HashMap
-			for (int i = 0; i < table.getColumns().size(); i++) {
-				Object key = row.getValue(i);
-
-				// if value doesn't exist yet, create a new List
-				// otherwise, append row onto existing List
-				index.computeIfAbsent(key, k -> new ArrayList<>()).add(row);
-			}
+		for (Row row : table.getRows()) {
+			Object key = row.getValue(columnIndex);
+			index.computeIfAbsent(key, k -> new ArrayList<>()).add(row);
 		}
 	}
 
 	public List<Row> lookup(Object key) {
-		return index.get(key);
+		return index.getOrDefault(key, new ArrayList<>());
 	}
 
 	public void insert(Object key, Row row) {
