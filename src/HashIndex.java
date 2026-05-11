@@ -38,9 +38,9 @@ public class HashIndex {
 	public void remove(Object key, Row row) {
 		List<Row> value = index.get(key);
 
-		value.remove(row);
-
-		index.put(key, value);
+		if (value != null) {
+			value.remove(row);
+		}
 	}
 
 	public String getColumnName() {
