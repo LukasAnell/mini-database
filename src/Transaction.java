@@ -5,10 +5,12 @@ public class Transaction {
 
     private Table table;
     private boolean isCommitted;
-    private List<Runnable> undoLog = new ArrayList<>();
+    private List<Runnable> undoLog;
 
     public Transaction(Table table) {
         this.table = table;
+        this.isCommitted = false;
+        this.undoLog = new ArrayList<>();
     }
 
     public void executeQuery(String query, QueryParser parser) {
