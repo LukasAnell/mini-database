@@ -74,7 +74,7 @@ public class Transaction {
 
     public void commit() {
         if (isCommitted()) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
 
         this.isCommitted = true;
@@ -85,7 +85,7 @@ public class Transaction {
 
     public void rollback() {
         if (isCommitted()) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
 
         for (int i = this.undoLog.size() - 1; i >= 0; i--) {
