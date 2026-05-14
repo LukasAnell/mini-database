@@ -1,10 +1,11 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Transaction {
 
     private Table table;
     private boolean isCommitted;
-    private List<Runnable> undoLog;
+    private List<Runnable> undoLog = new ArrayList<>();
 
     public Transaction(Table table) {
         this.table = table;
@@ -36,7 +37,7 @@ public class Transaction {
 
             // create Runnable and add to undoLog
             Runnable deleteQuery = () -> parser.execute(undoQuery, this.table);
-            undoLog.add(deleteQuery);
+            this.undoLog.add(deleteQuery);
         } else if (queryUpper.startsWith("DELETE")) {
             // DELETE FROM tableName WHERE v1 op v2
             // SELECT * FROM tableName WHERE v1 op v2
@@ -46,15 +47,25 @@ public class Transaction {
             String condition = query.substring(whereIndex);
 
             // create SELECT query
-            String undoQuery = String.format(
+            String selectQuery = String.format(
                 "SELECT * FROM %s WHERE %s",
                 this.table.getName(),
                 condition
             );
 
-            // create Runnable and add to undoLog
-            Runnable selectQuery = () -> parser.execute(undoQuery, this.table);
-            undoLog.add(selectQuery);
+            QueryResult preview = parser.execute(selectQuery, this.table);
+
+            // get all rows that would be deleted
+            List<Row> deletedRows = new ArrayList<>(preview.getRows());
+
+            // add an operation to undoLog that re-adds all those rows to table
+            Runnable addOperation = () -> {
+                for (Row row : deletedRows) {
+                    table.addRow(row);
+                }
+            };
+
+            this.undoLog.add(addOperation);
         }
         // Do nothing on SELECT
 
@@ -62,11 +73,26 @@ public class Transaction {
     }
 
     public void commit() {
-        //
+        if (isCommitted()) {
+            throw new IllegalArgumentException();
+        }
+
+        this.isCommitted = true;
+
+        // clear undoLog
+        this.undoLog = new ArrayList<>();
     }
 
     public void rollback() {
-        //
+        if (isCommitted()) {
+            throw new IllegalArgumentException();
+        }
+
+        for (int i = this.undoLog.size() - 1; i >= 0; i--) {
+            this.undoLog.get(i).run();
+        }
+
+        this.undoLog = new ArrayList<>();
     }
 
     public boolean isCommitted() {
