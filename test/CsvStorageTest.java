@@ -1,14 +1,15 @@
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CsvStorageTest {
-	private static final String TEST_FILE = "test_students.csv";
+
+    private static final String TEST_FILE = "test_students.csv";
     private Table original;
 
     @BeforeEach
@@ -47,8 +48,8 @@ public class CsvStorageTest {
         CsvStorage.saveTable(original, TEST_FILE);
         Table loaded = CsvStorage.loadTable("students", TEST_FILE);
         assertEquals(DataType.INTEGER, loaded.getColumns().get(0).getType());
-        assertEquals(DataType.STRING,  loaded.getColumns().get(1).getType());
-        assertEquals(DataType.DOUBLE,  loaded.getColumns().get(2).getType());
+        assertEquals(DataType.STRING, loaded.getColumns().get(1).getType());
+        assertEquals(DataType.DOUBLE, loaded.getColumns().get(2).getType());
     }
 
     @Test
@@ -98,7 +99,7 @@ public class CsvStorageTest {
         Table loaded = CsvStorage.loadTable("enrollment", TEST_FILE);
 
         assertInstanceOf(Boolean.class, loaded.getRows().get(0).getValue(1));
-        assertEquals(true,  loaded.getRows().get(0).getValue(1));
+        assertEquals(true, loaded.getRows().get(0).getValue(1));
         assertEquals(false, loaded.getRows().get(1).getValue(1));
     }
 }

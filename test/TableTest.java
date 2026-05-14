@@ -1,8 +1,8 @@
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TableTest {
 
@@ -41,7 +41,9 @@ public class TableTest {
     @Test
     void testMalformedRowThrows() {
         Row bad = new Row(List.of(1, "Alice")); // only 2 values, needs 3
-        assertThrows(IllegalArgumentException.class, () -> students.addRow(bad));
+        assertThrows(IllegalArgumentException.class, () ->
+            students.addRow(bad)
+        );
     }
 
     @Test

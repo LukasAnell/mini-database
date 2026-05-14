@@ -1,6 +1,6 @@
 public enum DataType {
-	INTEGER,
-	DOUBLE,
-	STRING,
-	BOOLEAN
+    INTEGER,
+    DOUBLE,
+    STRING,
+    BOOLEAN,
 }
