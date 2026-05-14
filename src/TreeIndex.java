@@ -9,9 +9,13 @@ public class TreeIndex {
 
     public TreeIndex(String columnName, Table table) {
         this.columnName = columnName;
-        this.index = new TreeMap<>((a, b) ->
+
+        @SuppressWarnings("unchecked")
+        TreeMap<Object, List<Row>> temp = new TreeMap<>((a, b) ->
             ((Comparable<Object>) a).compareTo(b)
         );
+
+        this.index = temp;
 
         // find column index
         List<Column> columns = table.getColumns();
