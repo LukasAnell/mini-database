@@ -123,16 +123,16 @@ DELETE FROM tableName WHERE column = value
 
 ## Design Decisions
 
-**Snapshot-based undo log for Transaction**
+**Snapshot-based undo log for Transaction** \
 Initially, I had logic to store inverse queries as Strings or some other operation that would reverse the given operation. However, my implementation was way too complex (in my opinion), so the current implementation simply captures a snapshot of the table's row list before a given change as a `Runnable` lambda. When a rollback is called, they're replayed in reverse order. I think this simpler, but much more memory intensive implementation is much easier for now and doesn't rely on the query parser.
 
-**Two index types for quick access**
+**Two index types for quick access** \
 `HashIndex` uses a `HashMap`, so it should ideally be used for exact-match lookups in O(1) average time. `TreeIndex` uses a `TreeMap` with a `Comparable` based comparator, which keeps key entries in it sorted. Using TreeMap as an index type allows for range queries on the data with `subMap`. Both index types are built eagerly at construction time.
 
-**`QueryParser` is stateless**
+**`QueryParser` is stateless** \
 `QueryParser` doesn't retain any data about a Table or its data. Its `execute` method takes in both the query string and the target table as arguments, which means it's safe to reuse a single Parser object across multiple tables and transactions.
 
-**CSV for persistent storage**
+**CSV for persistent storage** \
 I thought a CSV would be the best for this because it's a simple plaintext representation of the database. The first line of each CSV file encodes the column names and types (e.g. `id:INTEGER,name:STRING`), which means the in-memory database schema can be easily reconstructed on load without having to store any other metadata.
 
 ---
