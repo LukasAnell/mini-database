@@ -1,3 +1,9 @@
+/**
+ *
+ * @author
+ * @version
+ * @since
+ */
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -7,6 +13,11 @@ public class TreeIndex {
     private String columnName;
     private TreeMap<Object, List<Row>> index;
 
+    /**
+     *
+     * @param columnName
+     * @param table
+     */
     public TreeIndex(String columnName, Table table) {
         this.columnName = columnName;
 
@@ -35,10 +46,21 @@ public class TreeIndex {
         }
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public List<Row> lookup(Object key) {
         return index.getOrDefault(key, new ArrayList<>());
     }
 
+    /**
+     *
+     * @param low
+     * @param high
+     * @return
+     */
     public List<Row> lookupRange(Object low, Object high) {
         List<Row> rows = new ArrayList<>();
 
@@ -49,10 +71,20 @@ public class TreeIndex {
         return rows;
     }
 
+    /**
+     *
+     * @param key
+     * @param row
+     */
     public void insert(Object key, Row row) {
         index.computeIfAbsent(key, k -> new ArrayList<>()).add(row);
     }
 
+    /**
+     *
+     * @param key
+     * @param row
+     */
     public void remove(Object key, Row row) {
         List<Row> rows = index.get(key);
         if (rows != null) {
@@ -60,6 +92,10 @@ public class TreeIndex {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String getColumnName() {
         return columnName;
     }

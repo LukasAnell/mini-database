@@ -1,8 +1,20 @@
+/**
+ *
+ * @author
+ * @version
+ * @since
+ */
 import java.util.ArrayList;
 import java.util.List;
 
 public class QueryParser {
 
+    /**
+     *
+     * @param query
+     * @param table
+     * @return
+     */
     public QueryResult execute(String query, Table table) {
         // keywords: SELECT _ FROM, WHERE, INSERT INTO, VALUES, DELETE FROM
         switch (query.split(" ")[0].toUpperCase()) {

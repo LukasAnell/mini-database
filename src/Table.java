@@ -1,3 +1,9 @@
+/**
+ *
+ * @author
+ * @version
+ * @since
+ */
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,19 +13,36 @@ public class Table {
     private List<Column> columns;
     private List<Row> rows = new ArrayList<>();
 
+    /**
+     *
+     * @param name
+     * @param columns
+     */
     public Table(String name, List<Column> columns) {
         this.name = name;
         this.columns = columns;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Column> getColumns() {
         return columns;
     }
 
+    /**
+     *
+     * @param row
+     */
     public void addRow(Row row) {
         if (row.size() != columns.size()) {
             throw new IllegalArgumentException();
@@ -28,14 +51,25 @@ public class Table {
         rows.add(row);
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Row> getRows() {
         return rows;
     }
 
+    /**
+     *
+     * @param rows
+     */
     public void setRows(List<Row> rows) {
         this.rows = new ArrayList<>(rows);
     }
 
+    /**
+     *
+     */
     public void printTable() {
         System.out.printf("Table: %s\n", name);
 

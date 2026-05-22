@@ -1,3 +1,9 @@
+/**
+ *
+ * @author
+ * @version
+ * @since
+ */
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +13,21 @@ public class Transaction {
     private boolean isCommitted;
     private List<Runnable> undoLog;
 
+    /**
+     *
+     * @param table
+     */
     public Transaction(Table table) {
         this.table = table;
         this.isCommitted = false;
         this.undoLog = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param query
+     * @param parser
+     */
     public void executeQuery(String query, QueryParser parser) {
         String queryUpper = query.trim().toUpperCase();
 
@@ -27,6 +42,9 @@ public class Transaction {
         parser.execute(query, this.table);
     }
 
+    /**
+     *
+     */
     public void commit() {
         if (isCommitted()) {
             throw new IllegalStateException();
@@ -38,6 +56,9 @@ public class Transaction {
         this.undoLog.clear();
     }
 
+    /**
+     *
+     */
     public void rollback() {
         if (isCommitted()) {
             throw new IllegalStateException();
@@ -50,6 +71,10 @@ public class Transaction {
         this.undoLog.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isCommitted() {
         return isCommitted;
     }
