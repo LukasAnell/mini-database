@@ -1,8 +1,8 @@
 /**
  *
- * @author
- * @version
- * @since
+ * @author LukasAnell
+ * @version 1.0
+ * @since 2026.05.06
  */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

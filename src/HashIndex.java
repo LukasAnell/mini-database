@@ -1,8 +1,8 @@
 /**
  *
- * @author
- * @version
- * @since
+ * @author LukasAnell
+ * @version 1.0
+ * @since 2026.05.08
  */
 import java.util.ArrayList;
 import java.util.HashMap;
