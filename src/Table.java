@@ -36,9 +36,10 @@ public class Table {
     private List<Row> rows = new ArrayList<>();
 
     /**
+     * Create a Table with the given name and columns
      *
-     * @param name
-     * @param columns
+     * @param name The title of the table
+     * @param columns The list of columns in Table
      */
     public Table(String name, List<Column> columns) {
         this.name = name;
@@ -46,24 +47,27 @@ public class Table {
     }
 
     /**
+     * Get the Table's name
      *
-     * @return
+     * @return the Table name
      */
     public String getName() {
         return name;
     }
 
     /**
+     * Get the list of Columns in the Table
      *
-     * @return
+     * @return the list of Columns in the Table
      */
     public List<Column> getColumns() {
         return columns;
     }
 
     /**
+     * Add a new Row of data to the list of Rows in the Table. Each element in the Row corresponds to a Column in the Table
      *
-     * @param row
+     * @param row The row that will be added to the Table's list of Rows
      */
     public void addRow(Row row) {
         if (row.size() != columns.size()) {
@@ -74,23 +78,26 @@ public class Table {
     }
 
     /**
+     * Get the list of Rows in the Table
      *
-     * @return
+     * @return the list of Rows in the Table
      */
     public List<Row> getRows() {
         return rows;
     }
 
     /**
+     * Set the list of Rows in the Table to a different list of Rows
      *
-     * @param rows
+     * @param rows The new list of Rows that will be stored in Table
      */
     public void setRows(List<Row> rows) {
         this.rows = new ArrayList<>(rows);
     }
 
     /**
-     *
+     * Print a string representation of the Table.
+     * Formatted to show the title, the name and type of the columns, and the values stored in the list of rows.
      */
     public void printTable() {
         System.out.printf("Table: %s\n", name);
