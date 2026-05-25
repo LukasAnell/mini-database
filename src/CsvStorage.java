@@ -5,7 +5,18 @@
  *
  * Example usage:
  * { @snippet :
- *      //
+ *      // Assume `table` is an instance of Table, and is already created and populated.
+ *      try {
+ *          CsvStorage.saveTable(table, "products.csv");
+ *
+ *          // loadTable(tableName, filePath)
+ *          Table loaded = CsvStorage.loadTable("products_loaded", "products.csv");
+ *
+ *          // optional: verify contents
+ *          loaded.printTable();
+ *      } catch (IOException e) {
+ *          e.printStackTrace();
+ *      }
  * }
  *
  * @author LukasAnell
