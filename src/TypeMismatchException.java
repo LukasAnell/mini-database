@@ -1,9 +1,32 @@
+/**
+ * Exception thrown when a value does not match the expected data type for a column.
+ * Includes details about the column name, expected data type, and actual value that caused the mismatch.
+ *
+ * This exception is used to provide clear error messages when type mismatches occur during data insertion or manipulation in the Table.
+ *
+ * Example usage:
+ * { @snippet :
+ *      try {
+ *          // Attempt to add a row with a type mismatch (e.g., inserting a string into an integer column)
+ *          table.addRow(new Row(List.of("Alice", "not_a_number")));
+ *      } catch (TypeMismatchException e) {
+ *          System.out.println(e.getMessage());
+ *      }
+ * }
+ */
 public class TypeMismatchException extends RuntimeException {
 
     private String columnName;
     private DataType expectedType;
     private String actualValue;
 
+    /**
+     * Constructor for TypeMismatchException that initializes the column name, expected data type, and actual value that caused the mismatch.
+     *
+     * @param columnName The name of the column where the type mismatch occurred
+     * @param expectedType The expected data type for the column
+     * @param actualValue The actual value that was provided, which caused the type mismatch
+     */
     public TypeMismatchException(
         String columnName,
         DataType expectedType,
@@ -14,6 +37,10 @@ public class TypeMismatchException extends RuntimeException {
         this.actualValue = actualValue;
     }
 
+    /**
+     * Override the getMessage method to provide a detailed error message.
+     * Includes the column name, expected data type, and actual value that caused the mismatch.
+     */
     @Override
     public String getMessage() {
         return String.format(
