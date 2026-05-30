@@ -1,4 +1,24 @@
 /**
+ * A class that parses and executes SQL-like queries on a given Table object
+ *
+ * Use the execute method to run a query on a Table.
+ * The execute method returns a QueryResult object, which contains the rows resulting from the query and a message about the query execution.
+ *
+ * Supported query formats:
+ * - SELECT column1, column2 FROM tableName WHERE column3 > 5
+ * - SELECT * FROM tableName
+ * - INSERT INTO tableName VALUES value1, value2, value3
+ * - DELETE FROM tableName
+ * - DELETE FROM tableName WHERE column1 = 'value'
+ *
+ * Example usage:
+ * {@snippet :
+ *      // Assume `table` is an instance of Table, and is already created and populated
+ *      QueryParser parser = new QueryParser();
+ *      QueryResult result = parser.execute("SELECT name, price FROM products WHERE price > 10", table);
+ *
+ *      System.out.println(result.getMessage());
+ * }
  *
  * @author LukasAnell
  * @version 1.0
