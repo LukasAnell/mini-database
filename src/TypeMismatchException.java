@@ -38,6 +38,33 @@ public class TypeMismatchException extends RuntimeException {
     }
 
     /**
+     * Get the name of the column where the type mismatch occurred.
+     *
+     * @return name of the column where the type mismatch occurred
+     */
+    public String getColumnName() {
+        return columnName;
+    }
+
+    /**
+     * Get the expected data type for the column where the type mismatch occurred.
+     *
+     * @return the expected data type for the column where the type mismatch occurred
+     */
+    public DataType getExpectedType() {
+        return expectedType;
+    }
+
+    /**
+     * Get the actual value that was provided
+     *
+     * @return the actual value that was provided
+     */
+    public String getActualValue() {
+        return actualValue;
+    }
+
+    /**
      * Override the getMessage method to provide a detailed error message.
      * Includes the column name, expected data type, and actual value that caused the mismatch.
      */
