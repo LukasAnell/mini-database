@@ -74,6 +74,20 @@ public class Table {
             throw new IllegalArgumentException();
         }
 
+        // validate the DataType of each element in row, to make sure it matches the DataType of the matching column
+        for (int i = 0; i < row.size(); i++) {
+            Object rowValue = row.getValue(i);
+            Column currentColumn = columns.get(i);
+
+            if (!currentColumn.getType().equals(rowValue)) {
+                throw new TypeMismatchException(
+                    currentColumn.getName(),
+                    currentColumn.getType(),
+                    rowValue.toString()
+                );
+            }
+        }
+
         rows.add(row);
     }
 
