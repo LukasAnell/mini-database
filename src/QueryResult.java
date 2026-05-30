@@ -2,6 +2,8 @@
  * The QueryResult class represents the result of a query execution in the mini-database system.
  * It contains a list of rows that match the query criteria and a message indicating the status of the query execution.
  *
+ * Use this class to store and access the results of a query, including both the matching rows and messages about the execution status.
+ *
  * Example usage:
  * {@snippet :
  *      // Assume we have a list of rows and a message from executing a query

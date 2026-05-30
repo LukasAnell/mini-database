@@ -3,6 +3,9 @@
  * It allows for efficient lookups, insertions, and deletions based on the values of a specific column.
  * The index is built using a HashMap where the keys are the values from the indexed column, and the values are lists of rows that contain those keys.
  *
+ * Use this class to create an index on a specific column of a table.
+ * The index can be used to perform lookups, insertions, and deletions based on the indexed values.
+ *
  * Example usage:
  * {@snippet :
  *      // Assume we have a Table object with columns and rows
