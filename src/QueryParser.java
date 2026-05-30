@@ -30,10 +30,11 @@ import java.util.List;
 public class QueryParser {
 
     /**
+     * Parse the query string and execute it on the given Table object, returning a QueryResult with the results and a message.
      *
-     * @param query
-     * @param table
-     * @return
+     * @param query The SQL-like query string to be executed
+     * @param table The Table object the query is executed on
+     * @return a QueryResult object containing the resulting rows and a message about the query execution
      */
     public QueryResult execute(String query, Table table) {
         // keywords: SELECT _ FROM, WHERE, INSERT INTO, VALUES, DELETE FROM
@@ -50,6 +51,13 @@ public class QueryParser {
         }
     }
 
+    /**
+     * Handle SELECT queries, both with or without WHERE conditions.
+     *
+     * @param query The full SELECT query string to be executed
+     * @param table The Table object the query is executed on
+     * @return a QueryResult object
+     */
     private QueryResult caseSelect(String query, Table table) {
         // save for keyword parsing
         String queryUpper = query.toUpperCase();
@@ -113,6 +121,13 @@ public class QueryParser {
         return new QueryResult(collectedRows, message);
     }
 
+    /**
+     * Handle INSERT queries
+     *
+     * @param query The full INSERT query string to be executed
+     * @param table The Table object the query is executed on
+     * @return a QueryResult object
+     */
     private QueryResult caseInsert(String query, Table table) {
         String queryUpper = query.toUpperCase();
 
@@ -153,6 +168,13 @@ public class QueryParser {
         return new QueryResult(new ArrayList<>(), message);
     }
 
+    /**
+     * Handle DELETE queries, both with or without WHERE conditions.
+     *
+     * @param query The full DELETE query string to be executed
+     * @param table The Table object the query is executed on
+     * @return a QueryResult object
+     */
     private QueryResult caseDelete(String query, Table table) {
         String queryUpper = query.toUpperCase();
 
@@ -197,6 +219,12 @@ public class QueryParser {
         return new QueryResult(new ArrayList<>(), message);
     }
 
+    /**
+     * Parse the WHERE condition from the query string and return it as a Condition object.
+     *
+     * @param query The full query string containing the WHERE condition
+     * @return a Condition object representing the parsed WHERE condition
+     */
     private Condition getWhereCondition(String query) {
         // condition structure: colName op value
 
@@ -221,6 +249,14 @@ public class QueryParser {
         return new Condition(values[0].strip(), operator, values[1].strip());
     }
 
+    /**
+     * Test if a given Row satisfies a given Condition, based on the column definitions in the table.
+     *
+     * @param row The Row to be tested against the condition
+     * @param condition The Condition object representing the condition to test against
+     * @param columns The list of Column objects representing the table's column definitions (used to determine data types and column indices)
+     * @return true if the Row satisfies the Condition, false otherwise
+     */
     private boolean testRow(
         Row row,
         Condition condition,
@@ -281,6 +317,14 @@ public class QueryParser {
         return c1.compareTo(conditionValueCasted) == 0;
     }
 
+    /**
+     * Given a Row and a list of requested column names, return a new Row containing only the values of the requested columns.
+     *
+     * @param requestedColumns An array of column names that were requested in the SELECT query (or "*" for all columns)
+     * @param row The Row object from which to extract the requested column values
+     * @param columns The list of Column objects representing the table's column definitions (used to determine column indices)
+     * @return a new Row object containing only the values of the requested columns from the input Row
+     */
     private Row getRequestedColumns(
         String[] requestedColumns,
         Row row,
