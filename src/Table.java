@@ -74,20 +74,11 @@ public class Table {
             throw new IllegalArgumentException();
         }
 
-        // validate the DataType of each element in row, to make sure it matches the DataType of the matching column
         for (int i = 0; i < row.size(); i++) {
             Object rowValue = row.getValue(i);
             Column currentColumn = columns.get(i);
 
-            boolean valid = switch (currentColumn.getType()) {
-                case INTEGER -> rowValue instanceof Integer;
-                case DOUBLE -> rowValue instanceof Double ||
-                    rowValue instanceof Integer;
-                case STRING -> rowValue instanceof String;
-                case BOOLEAN -> rowValue instanceof Boolean;
-            };
-
-            if (!valid) {
+            if (!isValidType(rowValue, currentColumn.getType())) {
                 throw new TypeMismatchException(
                     currentColumn.getName(),
                     currentColumn.getType(),
@@ -162,5 +153,20 @@ public class Table {
 
             System.out.println(rowString.substring(0, rowString.length() - 3));
         }
+    }
+
+    /**
+     *
+     * @param value
+     * @param type
+     * @return
+     */
+    private static boolean isValidType(Object value, DataType type) {
+        return switch (type) {
+            case INTEGER -> value instanceof Integer;
+            case DOUBLE -> value instanceof Double || value instanceof Integer;
+            case STRING -> value instanceof String;
+            case BOOLEAN -> value instanceof Boolean;
+        };
     }
 }
