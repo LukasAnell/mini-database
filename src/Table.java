@@ -79,7 +79,15 @@ public class Table {
             Object rowValue = row.getValue(i);
             Column currentColumn = columns.get(i);
 
-            if (!currentColumn.getType().equals(rowValue)) {
+            boolean valid = switch (currentColumn.getType()) {
+                case INTEGER -> rowValue instanceof Integer;
+                case DOUBLE -> rowValue instanceof Double ||
+                    rowValue instanceof Integer;
+                case STRING -> rowValue instanceof String;
+                case BOOLEAN -> rowValue instanceof Boolean;
+            };
+
+            if (!valid) {
                 throw new TypeMismatchException(
                     currentColumn.getName(),
                     currentColumn.getType(),
