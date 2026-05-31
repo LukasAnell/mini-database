@@ -1,3 +1,5 @@
+package main.java;
+
 /**
  * The DataType enum represents the different data types that can be used in the database
  *

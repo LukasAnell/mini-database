@@ -1,3 +1,5 @@
+package main.java;
+
 /**
  * Exception thrown when a value does not match the expected data type for a column.
  * Includes details about the column name, expected data type, and actual value that caused the mismatch.

@@ -1,3 +1,5 @@
+package main.java;
+
 /**
  * Represents a row in a table: a list of values that corresponds to the columns of the table
  *

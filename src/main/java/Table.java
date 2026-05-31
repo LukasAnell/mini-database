@@ -1,3 +1,5 @@
+package main.java;
+
 /**
  * Represents a table: a title for the table, a list of columns, and a list of rows
  *

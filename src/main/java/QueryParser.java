@@ -1,3 +1,5 @@
+package main.java;
+
 /**
  * A class that parses and executes SQL-like queries on a given Table object
  *
