@@ -1,28 +1,3 @@
-/**
- * A helper class that helps use CSV files as a persistent storage format for tables
- *
- * Use the static methods in this class to save and load tables to and from CSV files.
- *
- * Example usage:
- * {@snippet :
- *      // Assume `table` is an instance of Table, and is already created and populated.
- *      try {
- *          CsvStorage.saveTable(table, "products.csv");
- *
- *          // loadTable(tableName, filePath)
- *          Table loaded = CsvStorage.loadTable("products_loaded", "products.csv");
- *
- *          // optional: verify contents
- *          loaded.printTable();
- *      } catch (IOException e) {
- *          e.printStackTrace();
- *      }
- * }
- *
- * @author LukasAnell
- * @version 1.0
- * @since 2026.05.06
- */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -31,7 +6,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A helper class that helps use CSV files as a persistent storage format for tables
+ *
+ * Use the static methods in this class to save and load tables to and from CSV files.
+ *
+ * Example usage:
+ * {@snippet :
+ * // Assume `table` is an instance of Table, and is already created and populated.
+ * try {
+ *     CsvStorage.saveTable(table, "products.csv");
+ *
+ *     // loadTable(tableName, filePath)
+ *     Table loaded = CsvStorage.loadTable("products_loaded", "products.csv");
+ *
+ *     // optional: verify contents
+ *     loaded.printTable();
+ * } catch (IOException e) {
+ *     e.printStackTrace();
+ * }
+ * }
+ *
+ * @author LukasAnell
+ * @version 1.0
+ * @since 2026.05.06
+ */
 public class CsvStorage {
+
+    /**
+     * Create a CsvStorage object.
+     * This constructor is intentionally empty because all methods in this class are static.
+     */
+    public CsvStorage() {
+        // intentionally empty
+    }
 
     /**
      * Save a table from memory into a CSV file.

@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * The QueryResult class represents the result of a query execution in the mini-database system.
  * It contains a list of rows that match the query criteria and a message indicating the status of the query execution.
@@ -6,24 +8,22 @@
  *
  * Example usage:
  * {@snippet :
- *      // Assume we have a list of rows and a message from executing a query
- *      List<Row> rows = ...; // obtained from query execution
- *      String message = "Query executed successfully";
+ * // Assume we have a list of rows and a message from executing a query
+ * List<Row> rows = ...; // obtained from query execution
+ * String message = "Query executed successfully";
  *
- *      // Create a QueryResult object to store the results
- *      QueryResult result = new QueryResult(rows, message);
+ * // Create a QueryResult object to store the results
+ * QueryResult result = new QueryResult(rows, message);
  *
- *      // Access the rows and message from the QueryResult
- *      List<Row> resultRows = result.getRows();
- *      String resultMessage = result.getMessage();
+ * // Access the rows and message from the QueryResult
+ * List<Row> resultRows = result.getRows();
+ * String resultMessage = result.getMessage();
  * }
  *
  * @author LukasAnell
  * @version 1.0
  * @since 2026.05.07
  */
-import java.util.List;
-
 public class QueryResult {
 
     private List<Row> rows;

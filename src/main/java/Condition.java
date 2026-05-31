@@ -6,8 +6,8 @@
  *
  * Example usage:
  * {@snippet :
- *      // Example: WHERE price > 10
- *      Condition condition = new Condition("price", ">", "10");
+ * // Example: WHERE price > 10
+ * Condition condition = new Condition("price", ">", "10");
  * }
  *
  * @author LukasAnell
@@ -24,7 +24,7 @@ public class Condition {
      * Create a Condition with the given column name, operator, and value
      *
      * @param columnName The name of the column to which the condition applies (e.g. "price")
-     * @param operator The operator for the condition (e.g. ">", "<", "=", "!=")
+     * @param operator The operator for the condition (e.g. ">", "{@literal <}", "=", "!=")
      * @param value The value to compare against (e.g. "10")
      */
     public Condition(String columnName, String operator, String value) {

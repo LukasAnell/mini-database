@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A class that parses and executes SQL-like queries on a given Table object
  *
@@ -13,21 +16,26 @@
  *
  * Example usage:
  * {@snippet :
- *      // Assume `table` is an instance of Table, and is already created and populated
- *      QueryParser parser = new QueryParser();
- *      QueryResult result = parser.execute("SELECT name, price FROM products WHERE price > 10", table);
+ * // Assume `table` is an instance of Table, and is already created and populated
+ * QueryParser parser = new QueryParser();
+ * QueryResult result = parser.execute("SELECT name, price FROM products WHERE price > 10", table);
  *
- *      System.out.println(result.getMessage());
+ * System.out.println(result.getMessage());
  * }
  *
  * @author LukasAnell
  * @version 1.0
  * @since 2026.05.07
  */
-import java.util.ArrayList;
-import java.util.List;
-
 public class QueryParser {
+
+    /**
+     * Create a QueryParser object.
+     * This constructor is intentionally empty because there is no initialization needed for this class.
+     */
+    public QueryParser() {
+        // intentionally empty
+    }
 
     /**
      * Parse the query string and execute it on the given Table object, returning a QueryResult with the results and a message.

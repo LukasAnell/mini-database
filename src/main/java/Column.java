@@ -5,8 +5,8 @@
  *
  * Example usage:
  * {@snippet :
- *      Column id = new Column("id", DataType.INTEGER);
- *      String name = id.getName();
+ * Column id = new Column("id", DataType.INTEGER);
+ * String name = id.getName();
  * }
  *
  * @author LukasAnell
