@@ -174,9 +174,12 @@ public class QueryParser {
                     }
                 }
                 case BOOLEAN -> {
-                    try {
+                    if (
+                        value.equalsIgnoreCase("true") ||
+                        value.equalsIgnoreCase("false")
+                    ) {
                         yield Boolean.parseBoolean(value);
-                    } catch (NumberFormatException e) {
+                    } else {
                         throw new TypeMismatchException(
                             table.getColumns().get(i).getName(),
                             type,
