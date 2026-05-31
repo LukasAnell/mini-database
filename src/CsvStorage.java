@@ -4,7 +4,7 @@
  * Use the static methods in this class to save and load tables to and from CSV files.
  *
  * Example usage:
- * { @snippet :
+ * {@snippet :
  *      // Assume `table` is an instance of Table, and is already created and populated.
  *      try {
  *          CsvStorage.saveTable(table, "products.csv");

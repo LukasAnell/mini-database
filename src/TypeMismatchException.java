@@ -5,7 +5,7 @@
  * This exception is used to provide clear error messages when type mismatches occur during data insertion or manipulation in the Table.
  *
  * Example usage:
- * { @snippet :
+ * {@snippet :
  *      try {
  *          // Attempt to add a row with a type mismatch (e.g., inserting a string into an integer column)
  *          table.addRow(new Row(List.of("Alice", "not_a_number")));
