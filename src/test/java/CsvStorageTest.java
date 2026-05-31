@@ -1,3 +1,5 @@
+package java;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
@@ -9,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 public class CsvStorageTest {
 
-    private static final String TEST_FILE = "test_students.csv";
+    private static final String TEST_FILE = "../resources/test_students.csv";
     private Table original;
 
     @BeforeEach
