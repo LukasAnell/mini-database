@@ -1,5 +1,3 @@
-package main.java;
-
 /**
  * TreeIndex is a simple implementation of a tree-based index for a database table.
  * It uses a TreeMap to store the index, allowing for efficient lookups and range queries based on the indexed column's values.

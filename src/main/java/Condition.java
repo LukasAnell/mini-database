@@ -1,5 +1,3 @@
-package main.java;
-
 /**
  * The Condition class represents a condition used in SQL queries, such as in WHERE clauses.
  * The object represents the column name, operator, and value for a specific condition.

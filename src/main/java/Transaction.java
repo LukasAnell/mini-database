@@ -1,5 +1,3 @@
-package main.java;
-
 /**
  * Represents a transaction that can execute queries on a table and either commit or rollback the changes.
  * The Transaction class maintains an undo log to allow rolling back changes if the transaction is not committed before the commit() method is called.

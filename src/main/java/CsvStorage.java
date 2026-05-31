@@ -1,5 +1,3 @@
-package main.java;
-
 /**
  * A helper class that helps use CSV files as a persistent storage format for tables
  *

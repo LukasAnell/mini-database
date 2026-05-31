@@ -1,5 +1,3 @@
-package main.java;
-
 /**
  * The QueryResult class represents the result of a query execution in the mini-database system.
  * It contains a list of rows that match the query criteria and a message indicating the status of the query execution.

@@ -1,5 +1,3 @@
-package main.java;
-
 /**
  * HashIndex is a simple implementation of a hash-based index for a database table.
  * It allows for efficient lookups, insertions, and deletions based on the values of a specific column.

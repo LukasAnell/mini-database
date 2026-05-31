@@ -1,5 +1,3 @@
-package main.java;
-
 /**
  * Represents a column in a table: the column's name and its data type
  *
