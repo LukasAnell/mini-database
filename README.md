@@ -16,34 +16,38 @@ This is a small project that has served as practice implementing a relational da
 - Hash indexing for fast equality lookups
 - Tree indexing for sorted and range-based lookups
 - Transactions that support commits and rollbacks
+- Type enforcement on INSERT
 
 ## Project Structure
 
 ```
-❯ tree --dirsfirst
+❯ tree --dirsfirst --gitignore
 .
 ├── lib
 │   └── junit-platform-console-standalone-1.10.2.jar
 ├── src
-│   ├── Column.java             # Column name and type definition
-│   ├── Condition.java          # Represents a WHERE clause condition
-│   ├── CsvStorage.java         # Save and load tables as CSV files
-│   ├── DataType.java           # Enum of currently supported column types
-│   ├── HashIndex.java          # HashMap-based index for equality lookups
-│   ├── QueryParser.java        # Parses and executes queries
-│   ├── QueryResult.java        # Object to store rows returned and a result message
-│   ├── Row.java                # Represents a single row of typed values
-│   ├── Table.java              # In-memory table of rows and columns
-│   ├── Transaction.java        # Used for executing queries with rollback support
-│   └── TreeIndex.java          # TreeMap-based index for range lookups
-├── test                        # Testing files
+│   ├── Column.java
+│   ├── Condition.java
+│   ├── CsvStorage.java
+│   ├── DataType.java
+│   ├── HashIndex.java
+│   ├── QueryParser.java
+│   ├── QueryResult.java
+│   ├── Row.java
+│   ├── Table.java
+│   ├── Transaction.java
+│   ├── TreeIndex.java
+│   └── TypeMismatchException.java
+├── test
 │   ├── resources
-│   │   └── test_students.csv   # Example .csv file used in tests
+│   │   └── test_students.csv
 │   ├── CsvStorageTest.java
 │   ├── IndexTest.java
 │   ├── QueryParserTest.java
 │   ├── TableTest.java
-│   └── TransactionTest.java
+│   ├── TransactionTest.java
+│   └── TypeEnforcementTest.java
+├── LICENSE
 ├── README.md
 └── pom.xml
 ```
@@ -144,7 +148,6 @@ I thought a CSV would be the best for this because it's a simple plaintext repre
     - No `AND`, `OR`, or `NOT`
 - Values in queries and in CSV files cannot contain commas
 - Indexes will not be written to disk for persistence, and must be rebuilt after loading a table from a CSV
-- Column types are not enforced at insert time, and will result in a runtime parsing error
 - No support for `NULL` values
 
 ---
@@ -156,5 +159,4 @@ I thought a CSV would be the best for this because it's a simple plaintext repre
     - `NOT` support also included
 - Persist each index type alongside the CSV files so they can survive restarts
 - Add an interactive shell so the database can be queried from the command line
-- Enforce types on `INSERT`, along with meaningful error messages
 - Support multiple tables with `JOIN` queries
