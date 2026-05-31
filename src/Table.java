@@ -74,6 +74,19 @@ public class Table {
             throw new IllegalArgumentException();
         }
 
+        for (int i = 0; i < row.size(); i++) {
+            Object rowValue = row.getValue(i);
+            Column currentColumn = columns.get(i);
+
+            if (!isValidType(rowValue, currentColumn.getType())) {
+                throw new TypeMismatchException(
+                    currentColumn.getName(),
+                    currentColumn.getType(),
+                    rowValue.toString()
+                );
+            }
+        }
+
         rows.add(row);
     }
 
@@ -110,14 +123,10 @@ public class Table {
         columnHeader.setLength(columnHeader.length() - 3);
         System.out.println(columnHeader);
 
-        String spacer = "--";
-        for (int i = 0; i < columnHeader.length(); i++) {
-            spacer += "-";
-        }
-        System.out.println(spacer);
+        System.out.println("-".repeat(columnHeader.length() + 2));
 
         for (int i = 0; i < rows.size(); i++) {
-            String rowString = "";
+            StringBuilder rowString = new StringBuilder();
 
             Row currentRow = rows.get(i);
             for (int j = 0; j < currentRow.size(); j++) {
@@ -126,19 +135,39 @@ public class Table {
                 // length of current column's header
                 // so we can add spaces to entry, so it lines up
                 int headerLength = columns.get(j).toString().length();
-                String spaces = "";
+                StringBuilder spaces = new StringBuilder();
                 for (
                     int k = 0;
                     k < headerLength - currentValue.toString().length();
                     k++
                 ) {
-                    spaces += " ";
+                    spaces.append(" ");
                 }
 
-                rowString += (currentValue.toString() + spaces + " | ");
+                rowString
+                    .append(currentValue.toString())
+                    .append(spaces)
+                    .append(" | ");
             }
 
             System.out.println(rowString.substring(0, rowString.length() - 3));
         }
+    }
+
+    /**
+     * Helper method to check if a given value is of the correct type for a column.
+     * This is used in addRow to enforce type safety when adding new rows to the table.
+     *
+     * @param value The value to check
+     * @param type The expected DataType for the column
+     * @return true if the value is of the correct type for the column, false otherwise
+     */
+    private static boolean isValidType(Object value, DataType type) {
+        return switch (type) {
+            case INTEGER -> value instanceof Integer;
+            case DOUBLE -> value instanceof Double || value instanceof Integer;
+            case STRING -> value instanceof String;
+            case BOOLEAN -> value instanceof Boolean;
+        };
     }
 }

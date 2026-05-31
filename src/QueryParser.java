@@ -151,9 +151,42 @@ public class QueryParser {
             // convert value to be type
             Object convertedValue = switch (type) {
                 case STRING -> value;
-                case INTEGER -> Integer.parseInt(value);
-                case DOUBLE -> Double.parseDouble(value);
-                case BOOLEAN -> Boolean.parseBoolean(value);
+                case INTEGER -> {
+                    try {
+                        yield Integer.parseInt(value);
+                    } catch (NumberFormatException e) {
+                        throw new TypeMismatchException(
+                            table.getColumns().get(i).getName(),
+                            type,
+                            value
+                        );
+                    }
+                }
+                case DOUBLE -> {
+                    try {
+                        yield Double.parseDouble(value);
+                    } catch (NumberFormatException e) {
+                        throw new TypeMismatchException(
+                            table.getColumns().get(i).getName(),
+                            type,
+                            value
+                        );
+                    }
+                }
+                case BOOLEAN -> {
+                    if (
+                        value.equalsIgnoreCase("true") ||
+                        value.equalsIgnoreCase("false")
+                    ) {
+                        yield Boolean.parseBoolean(value);
+                    } else {
+                        throw new TypeMismatchException(
+                            table.getColumns().get(i).getName(),
+                            type,
+                            value
+                        );
+                    }
+                }
             };
 
             values.add(convertedValue);
