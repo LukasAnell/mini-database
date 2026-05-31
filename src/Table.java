@@ -156,10 +156,12 @@ public class Table {
     }
 
     /**
+     * Helper method to check if a given value is of the correct type for a column.
+     * This is used in addRow to enforce type safety when adding new rows to the table.
      *
-     * @param value
-     * @param type
-     * @return
+     * @param value The value to check
+     * @param type The expected DataType for the column
+     * @return true if the value is of the correct type for the column, false otherwise
      */
     private static boolean isValidType(Object value, DataType type) {
         return switch (type) {
