@@ -32,6 +32,14 @@ public class TypeMismatchException extends RuntimeException {
         DataType expectedType,
         String actualValue
     ) {
+        super(
+            String.format(
+                "Type mismatch for column '%s': expected %s but got '%s'",
+                columnName,
+                expectedType,
+                actualValue
+            )
+        );
         this.columnName = columnName;
         this.expectedType = expectedType;
         this.actualValue = actualValue;
@@ -62,19 +70,5 @@ public class TypeMismatchException extends RuntimeException {
      */
     public String getActualValue() {
         return actualValue;
-    }
-
-    /**
-     * Override the getMessage method to provide a detailed error message.
-     * Includes the column name, expected data type, and actual value that caused the mismatch.
-     */
-    @Override
-    public String getMessage() {
-        return String.format(
-            "Type mismatch for column '%s': expected %s but got '%s'",
-            columnName,
-            expectedType,
-            actualValue
-        );
     }
 }
