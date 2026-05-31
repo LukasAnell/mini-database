@@ -11,23 +11,23 @@ import java.util.List;
  *
  * Example usage:
  * {@snippet :
- *      // Assume we have a Table object and a QueryParser object
- *      Table table = ...; // obtain a Table object
- *      QueryParser parser = ...; // obtain a QueryParser object
+ * // Assume we have a Table object and a QueryParser object
+ * Table table = ...; // obtain a Table object
+ * QueryParser parser = ...; // obtain a QueryParser object
  *
- *      // Create a new transaction for the table
- *      Transaction transaction = new Transaction(table);
+ * // Create a new transaction for the table
+ * Transaction transaction = new Transaction(table);
  *
- *      // Execute some queries within the transaction
- *      transaction.executeQuery("INSERT INTO ...", parser);
- *      transaction.executeQuery("UPDATE ...", parser);
+ * // Execute some queries within the transaction
+ * transaction.executeQuery("INSERT INTO ...", parser);
+ * transaction.executeQuery("UPDATE ...", parser);
  *
- *      // Commit the transaction to save the changes
- *      transaction.commit();
+ * // Commit the transaction to save the changes
+ * transaction.commit();
  *
- *      // If we wanted to rollback instead of committing, we would call:
- *      // Reminder: Do not call commit() if you want to rollback, as commit() will clear the undo log and prevent rollback from working.
- *      // transaction.rollback();
+ * // If we wanted to rollback instead of committing, we would call:
+ * // Reminder: Do not call commit() if you want to rollback, as commit() will clear the undo log and prevent rollback from working.
+ * // transaction.rollback();
  * }
  *
  * @author LukasAnell

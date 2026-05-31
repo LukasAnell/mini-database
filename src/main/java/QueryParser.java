@@ -16,11 +16,11 @@ import java.util.List;
  *
  * Example usage:
  * {@snippet :
- *      // Assume `table` is an instance of Table, and is already created and populated
- *      QueryParser parser = new QueryParser();
- *      QueryResult result = parser.execute("SELECT name, price FROM products WHERE price > 10", table);
+ * // Assume `table` is an instance of Table, and is already created and populated
+ * QueryParser parser = new QueryParser();
+ * QueryResult result = parser.execute("SELECT name, price FROM products WHERE price > 10", table);
  *
- *      System.out.println(result.getMessage());
+ * System.out.println(result.getMessage());
  * }
  *
  * @author LukasAnell

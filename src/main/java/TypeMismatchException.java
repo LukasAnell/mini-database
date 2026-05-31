@@ -6,12 +6,12 @@
  *
  * Example usage:
  * {@snippet :
- *      try {
- *          // Attempt to add a row with a type mismatch (e.g., inserting a string into an integer column)
- *          table.addRow(new Row(List.of("Alice", "not_a_number")));
- *      } catch (TypeMismatchException e) {
- *          System.out.println(e.getMessage());
- *      }
+ * try {
+ *     // Attempt to add a row with a type mismatch (e.g., inserting a string into an integer column)
+ *     table.addRow(new Row(List.of("Alice", "not_a_number")));
+ * } catch (TypeMismatchException e) {
+ *     System.out.println(e.getMessage());
+ * }
  * }
  */
 public class TypeMismatchException extends RuntimeException {

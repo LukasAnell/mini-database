@@ -8,21 +8,21 @@ import java.util.List;
  *
  * Example usage:
  * {@snippet :
- *      List<Column> columns = Arrays.asList(
- *          new Column("id", DataType.INTEGER),
- *          new Column("name", DataType.STRING),
- *          new Column("price", DataType.DOUBLE)
- *      );
+ * List<Column> columns = Arrays.asList(
+ *     new Column("id", DataType.INTEGER),
+ *     new Column("name", DataType.STRING),
+ *     new Column("price", DataType.DOUBLE)
+ * );
  *
- *      // Create the table
- *      Table table = new Table("products", columns);
+ * // Create the table
+ * Table table = new Table("products", columns);
  *
- *      // Add rows (each Row must have the same number of values as columns)
- *      table.addRow(new Row(Arrays.asList(1, "Widget", 9.99)));
- *      table.addRow(new Row(Arrays.asList(2, "Gadget", 14.50)));
+ * // Add rows (each Row must have the same number of values as columns)
+ * table.addRow(new Row(Arrays.asList(1, "Widget", 9.99)));
+ * table.addRow(new Row(Arrays.asList(2, "Gadget", 14.50)));
  *
- *      // Print the table
- *      table.printTable();
+ * // Print the table
+ * table.printTable();
  * }
  *
  * @author LukasAnell

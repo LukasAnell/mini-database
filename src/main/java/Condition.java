@@ -6,8 +6,8 @@
  *
  * Example usage:
  * {@snippet :
- *      // Example: WHERE price > 10
- *      Condition condition = new Condition("price", ">", "10");
+ * // Example: WHERE price > 10
+ * Condition condition = new Condition("price", ">", "10");
  * }
  *
  * @author LukasAnell

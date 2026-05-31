@@ -9,10 +9,10 @@
  *
  * Example usage:
  * {@snippet :
- *      DataType type = DataType.INTEGER;
- *      if (type == DataType.INTEGER) {
- *          System.out.println("The data type is INTEGER");
- *      }
+ * DataType type = DataType.INTEGER;
+ * if (type == DataType.INTEGER) {
+ *     System.out.println("The data type is INTEGER");
+ * }
  * }
  *
  * @author LukasAnell

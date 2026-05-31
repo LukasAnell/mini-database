@@ -7,8 +7,8 @@ import java.util.List;
  *
  * Example usage:
  * {@snippet :
- *      List<Object> values = Arrays.asList("Jeff", 25, "Engineer");
- *      Row row = new Row(values);
+ * List<Object> values = Arrays.asList("Jeff", 25, "Engineer");
+ * Row row = new Row(values);
  * }
  *
  * @author LukasAnell
