@@ -123,11 +123,7 @@ public class Table {
         columnHeader.setLength(columnHeader.length() - 3);
         System.out.println(columnHeader);
 
-        StringBuilder spacer = new StringBuilder("--");
-        for (int i = 0; i < columnHeader.length(); i++) {
-            spacer.append("-");
-        }
-        System.out.println(spacer);
+        System.out.println("-".repeat(columnHeader.length() + 2));
 
         for (int i = 0; i < rows.size(); i++) {
             StringBuilder rowString = new StringBuilder();

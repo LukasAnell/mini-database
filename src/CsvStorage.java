@@ -136,6 +136,8 @@ public class CsvStorage {
             }
 
             return table;
+        } catch (TypeMismatchException e) {
+            throw new IOException();
         }
     }
 }
