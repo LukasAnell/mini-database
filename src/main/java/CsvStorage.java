@@ -34,6 +34,14 @@ import java.util.List;
 public class CsvStorage {
 
     /**
+     * Create a CsvStorage object.
+     * This constructor is intentionally empty because all methods in this class are static.
+     */
+    public CsvStorage() {
+        // intentionally empty
+    }
+
+    /**
      * Save a table from memory into a CSV file.
      *
      * The first line of the CSV file should contain the column headers, in the format "name:type" (e.g. "id:INTEGER,name:STRING,price:DOUBLE").

@@ -30,6 +30,14 @@ import java.util.List;
 public class QueryParser {
 
     /**
+     * Create a QueryParser object.
+     * This constructor is intentionally empty because there is no initialization needed for this class.
+     */
+    public QueryParser() {
+        // intentionally empty
+    }
+
+    /**
      * Parse the query string and execute it on the given Table object, returning a QueryResult with the results and a message.
      *
      * @param query The SQL-like query string to be executed

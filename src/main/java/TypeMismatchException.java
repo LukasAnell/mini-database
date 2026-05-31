@@ -16,8 +16,19 @@
  */
 public class TypeMismatchException extends RuntimeException {
 
+    /**
+     * The name of the column where the type mismatch occurred
+     */
     private String columnName;
+
+    /**
+     * The expected data type for the column where the type mismatch occurred
+     */
     private DataType expectedType;
+
+    /**
+     * The actual value that was provided, which caused the type mismatch
+     */
     private String actualValue;
 
     /**
