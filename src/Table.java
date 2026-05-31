@@ -130,7 +130,7 @@ public class Table {
         System.out.println(spacer);
 
         for (int i = 0; i < rows.size(); i++) {
-            StringBuilder rowString = new StringBuilder("");
+            StringBuilder rowString = new StringBuilder();
 
             Row currentRow = rows.get(i);
             for (int j = 0; j < currentRow.size(); j++) {
@@ -139,16 +139,19 @@ public class Table {
                 // length of current column's header
                 // so we can add spaces to entry, so it lines up
                 int headerLength = columns.get(j).toString().length();
-                String spaces = "";
+                StringBuilder spaces = new StringBuilder();
                 for (
                     int k = 0;
                     k < headerLength - currentValue.toString().length();
                     k++
                 ) {
-                    spaces += " ";
+                    spaces.append(" ");
                 }
 
-                rowString.append(currentValue.toString() + spaces + " | ");
+                rowString
+                    .append(currentValue.toString())
+                    .append(spaces)
+                    .append(" | ");
             }
 
             System.out.println(rowString.substring(0, rowString.length() - 3));
