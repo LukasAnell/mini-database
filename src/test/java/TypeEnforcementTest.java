@@ -3,6 +3,12 @@ package test.java;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import main.java.Column;
+import main.java.DataType;
+import main.java.QueryParser;
+import main.java.Row;
+import main.java.Table;
+import main.java.TypeMismatchException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
