@@ -1,19 +1,28 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class CsvStorageTest {
 
     private static final String TEST_FILE = "test_students.csv";
+
+    @TempDir
+    Path tempDir;
+
+    private Path testFile;
     private Table original;
 
     @BeforeEach
     void setUp() {
+        testFile = tempDir.resolve(TEST_FILE);
+
         List<Column> columns = List.of(
             new Column("id", DataType.INTEGER),
             new Column("name", DataType.STRING),
@@ -25,28 +34,28 @@ public class CsvStorageTest {
     }
 
     @AfterEach
-    void tearDown() {
-        new File(TEST_FILE).delete();
+    void tearDown() throws IOException {
+        Files.deleteIfExists(testFile);
     }
 
     @Test
     void testSaveAndLoadTableName() throws IOException {
-        CsvStorage.saveTable(original, TEST_FILE);
-        Table loaded = CsvStorage.loadTable("students", TEST_FILE);
+        CsvStorage.saveTable(original, testFile.toString());
+        Table loaded = CsvStorage.loadTable("students", testFile.toString());
         assertEquals("students", loaded.getName());
     }
 
     @Test
     void testSaveAndLoadColumnCount() throws IOException {
-        CsvStorage.saveTable(original, TEST_FILE);
-        Table loaded = CsvStorage.loadTable("students", TEST_FILE);
+        CsvStorage.saveTable(original, testFile.toString());
+        Table loaded = CsvStorage.loadTable("students", testFile.toString());
         assertEquals(3, loaded.getColumns().size());
     }
 
     @Test
     void testSaveAndLoadColumnTypes() throws IOException {
-        CsvStorage.saveTable(original, TEST_FILE);
-        Table loaded = CsvStorage.loadTable("students", TEST_FILE);
+        CsvStorage.saveTable(original, testFile.toString());
+        Table loaded = CsvStorage.loadTable("students", testFile.toString());
         assertEquals(DataType.INTEGER, loaded.getColumns().get(0).getType());
         assertEquals(DataType.STRING, loaded.getColumns().get(1).getType());
         assertEquals(DataType.DOUBLE, loaded.getColumns().get(2).getType());
@@ -54,15 +63,15 @@ public class CsvStorageTest {
 
     @Test
     void testSaveAndLoadRowCount() throws IOException {
-        CsvStorage.saveTable(original, TEST_FILE);
-        Table loaded = CsvStorage.loadTable("students", TEST_FILE);
+        CsvStorage.saveTable(original, testFile.toString());
+        Table loaded = CsvStorage.loadTable("students", testFile.toString());
         assertEquals(2, loaded.getRows().size());
     }
 
     @Test
     void testLoadedValuesHaveCorrectTypes() throws IOException {
-        CsvStorage.saveTable(original, TEST_FILE);
-        Table loaded = CsvStorage.loadTable("students", TEST_FILE);
+        CsvStorage.saveTable(original, testFile.toString());
+        Table loaded = CsvStorage.loadTable("students", testFile.toString());
         Object id = loaded.getRows().get(0).getValue(0);
         Object gpa = loaded.getRows().get(0).getValue(2);
         assertInstanceOf(Integer.class, id);
@@ -71,8 +80,8 @@ public class CsvStorageTest {
 
     @Test
     void testLoadedValuesAreCorrect() throws IOException {
-        CsvStorage.saveTable(original, TEST_FILE);
-        Table loaded = CsvStorage.loadTable("students", TEST_FILE);
+        CsvStorage.saveTable(original, testFile.toString());
+        Table loaded = CsvStorage.loadTable("students", testFile.toString());
         assertEquals(1, loaded.getRows().get(0).getValue(0));
         assertEquals("Alice", loaded.getRows().get(0).getValue(1));
         assertEquals(3.9, loaded.getRows().get(0).getValue(2));
@@ -95,8 +104,8 @@ public class CsvStorageTest {
         boolTable.addRow(new Row(List.of("Alice", true)));
         boolTable.addRow(new Row(List.of("Bob", false)));
 
-        CsvStorage.saveTable(boolTable, TEST_FILE);
-        Table loaded = CsvStorage.loadTable("enrollment", TEST_FILE);
+        CsvStorage.saveTable(boolTable, testFile.toString());
+        Table loaded = CsvStorage.loadTable("enrollment", testFile.toString());
 
         assertInstanceOf(Boolean.class, loaded.getRows().get(0).getValue(1));
         assertEquals(true, loaded.getRows().get(0).getValue(1));
