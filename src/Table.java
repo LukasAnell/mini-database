@@ -123,14 +123,14 @@ public class Table {
         columnHeader.setLength(columnHeader.length() - 3);
         System.out.println(columnHeader);
 
-        String spacer = "--";
+        StringBuilder spacer = new StringBuilder("--");
         for (int i = 0; i < columnHeader.length(); i++) {
-            spacer += "-";
+            spacer.append("-");
         }
         System.out.println(spacer);
 
         for (int i = 0; i < rows.size(); i++) {
-            String rowString = "";
+            StringBuilder rowString = new StringBuilder("");
 
             Row currentRow = rows.get(i);
             for (int j = 0; j < currentRow.size(); j++) {
@@ -148,7 +148,7 @@ public class Table {
                     spaces += " ";
                 }
 
-                rowString += (currentValue.toString() + spaces + " | ");
+                rowString.append(currentValue.toString() + spaces + " | ");
             }
 
             System.out.println(rowString.substring(0, rowString.length() - 3));
