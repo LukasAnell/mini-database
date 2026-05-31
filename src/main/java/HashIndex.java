@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * HashIndex is a simple implementation of a hash-based index for a database table.
  * It allows for efficient lookups, insertions, and deletions based on the values of a specific column.
@@ -29,10 +33,6 @@
  * @version 1.0
  * @since 2026.05.08
  */
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 public class HashIndex {
 
     private String columnName;

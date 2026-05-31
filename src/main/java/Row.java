@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Represents a row in a table: a list of values that corresponds to the columns of the table
  *
@@ -13,8 +15,6 @@
  * @version 1.0
  * @since 2026.05.06
  */
-import java.util.List;
-
 public class Row {
 
     private List<Object> values;

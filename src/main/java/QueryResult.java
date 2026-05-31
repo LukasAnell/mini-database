@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * The QueryResult class represents the result of a query execution in the mini-database system.
  * It contains a list of rows that match the query criteria and a message indicating the status of the query execution.
@@ -22,8 +24,6 @@
  * @version 1.0
  * @since 2026.05.07
  */
-import java.util.List;
-
 public class QueryResult {
 
     private List<Row> rows;

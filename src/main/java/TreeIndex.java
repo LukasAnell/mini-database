@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+
 /**
  * TreeIndex is a simple implementation of a tree-based index for a database table.
  * It uses a TreeMap to store the index, allowing for efficient lookups and range queries based on the indexed column's values.
@@ -32,10 +36,6 @@
  * @version 1.0
  * @since 2026.05.11
  */
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-
 public class TreeIndex {
 
     private String columnName;

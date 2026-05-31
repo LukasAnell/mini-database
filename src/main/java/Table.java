@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a table: a title for the table, a list of columns, and a list of rows
  *
@@ -26,9 +29,6 @@
  * @version 1.0
  * @since 2026.05.06
  */
-import java.util.ArrayList;
-import java.util.List;
-
 public class Table {
 
     private String name;

@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A class that parses and executes SQL-like queries on a given Table object
  *
@@ -24,9 +27,6 @@
  * @version 1.0
  * @since 2026.05.07
  */
-import java.util.ArrayList;
-import java.util.List;
-
 public class QueryParser {
 
     /**
