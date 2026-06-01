@@ -26,27 +26,38 @@ This is a small project that has served as practice implementing a relational da
 ├── lib
 │   └── junit-platform-console-standalone-1.10.2.jar
 ├── src
-│   ├── Column.java
-│   ├── Condition.java
-│   ├── CsvStorage.java
-│   ├── DataType.java
-│   ├── HashIndex.java
-│   ├── QueryParser.java
-│   ├── QueryResult.java
-│   ├── Row.java
-│   ├── Table.java
-│   ├── Transaction.java
-│   ├── TreeIndex.java
-│   └── TypeMismatchException.java
-├── test
-│   ├── resources
-│   │   └── test_students.csv
-│   ├── CsvStorageTest.java
-│   ├── IndexTest.java
-│   ├── QueryParserTest.java
-│   ├── TableTest.java
-│   ├── TransactionTest.java
-│   └── TypeEnforcementTest.java
+│   ├── main
+│   │   ├── java
+│   │   │   └── org
+│   │   │       └── lukasanell
+│   │   │           └── minidatabase
+│   │   │               ├── Column.java
+│   │   │               ├── Condition.java
+│   │   │               ├── CsvStorage.java
+│   │   │               ├── DataType.java
+│   │   │               ├── HashIndex.java
+│   │   │               ├── QueryParser.java
+│   │   │               ├── QueryResult.java
+│   │   │               ├── Row.java
+│   │   │               ├── Table.java
+│   │   │               ├── Transaction.java
+│   │   │               ├── TreeIndex.java
+│   │   │               └── TypeMismatchException.java
+│   │   └── resources
+│   └── test
+│       ├── java
+│       │   └── org
+│       │       └── lukasanell
+│       │           └── minidatabase
+│       │               ├── CsvStorageTest.java
+│       │               ├── IndexTest.java
+│       │               ├── QueryParserTest.java
+│       │               ├── TableTest.java
+│       │               ├── TransactionTest.java
+│       │               ├── TypeEnforcementTest.java
+│       │               └── UpdateQueryTest.java
+│       └── resources
+│           └── test_students.csv
 ├── LICENSE
 ├── README.md
 └── pom.xml
