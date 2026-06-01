@@ -47,7 +47,6 @@ public class QueryParser {
      * @return a QueryResult object containing the resulting rows and a message about the query execution
      */
     public QueryResult execute(String query, Table table) {
-        // keywords: SELECT _ FROM, WHERE, INSERT INTO, VALUES, DELETE FROM
         switch (query.split(" ")[0].toUpperCase()) {
             case "SELECT":
                 return caseSelect(query, table);
@@ -55,6 +54,8 @@ public class QueryParser {
                 return caseInsert(query, table);
             case "DELETE":
                 return caseDelete(query, table);
+            case "UPDATE":
+                return caseUpdate(query, table);
             default:
                 // malformed query
                 throw new IllegalArgumentException();
@@ -259,6 +260,139 @@ public class QueryParser {
 
         // return QueryResult object with empty row list and message saying how many removed
         String message = String.format("%d row(s) deleted", deletedCount);
+        return new QueryResult(new ArrayList<>(), message);
+    }
+
+    /**
+     *
+     * @param query
+     * @param table
+     * @return
+     */
+    private QueryResult caseUpdate(String query, Table table) {
+        String queryUpper = query.toUpperCase();
+
+        boolean hasWhere = queryUpper.contains("WHERE");
+
+        Condition whereCondition = null;
+        if (hasWhere) {
+            whereCondition = getWhereCondition(query);
+        }
+
+        List<Row> rows = table.getRows();
+
+        // get column name and value to set from query
+        // (between SET and WHERE, or between SET and end of query if no WHERE)
+        String setStr = hasWhere
+            ? query
+                  .substring(
+                      queryUpper.indexOf("SET") + 3,
+                      queryUpper.indexOf("WHERE")
+                  )
+                  .trim()
+            : query.substring(queryUpper.indexOf("SET") + 3).trim();
+
+        String[] setParts = setStr.split("=");
+        if (setParts.length != 2) {
+            throw new IllegalArgumentException();
+        }
+
+        String setColumnName = setParts[0].trim();
+        String setValueStr = setParts[1].trim();
+
+        // find column index and type for setColumnName
+        int setColumnIndex = -1;
+        DataType setColumnType = null;
+        for (int i = 0; i < table.getColumns().size(); i++) {
+            if (table.getColumns().get(i).getName().equals(setColumnName)) {
+                setColumnIndex = i;
+                setColumnType = table.getColumns().get(i).getType();
+
+                break;
+            }
+        }
+
+        if (setColumnIndex == -1) {
+            throw new IllegalArgumentException();
+        }
+
+        // convert setValueStr to setColumnType
+        Object setValue = switch (setColumnType) {
+            case STRING -> setValueStr;
+            case INTEGER -> {
+                try {
+                    yield Integer.parseInt(setValueStr);
+                } catch (NumberFormatException e) {
+                    throw new TypeMismatchException(
+                        setColumnName,
+                        setColumnType,
+                        setValueStr
+                    );
+                }
+            }
+            case DOUBLE -> {
+                try {
+                    yield Double.parseDouble(setValueStr);
+                } catch (NumberFormatException e) {
+                    throw new TypeMismatchException(
+                        setColumnName,
+                        setColumnType,
+                        setValueStr
+                    );
+                }
+            }
+            case BOOLEAN -> {
+                if (
+                    setValueStr.equalsIgnoreCase("true") ||
+                    setValueStr.equalsIgnoreCase("false")
+                ) {
+                    yield Boolean.parseBoolean(setValueStr);
+                } else {
+                    throw new TypeMismatchException(
+                        setColumnName,
+                        setColumnType,
+                        setValueStr
+                    );
+                }
+            }
+        };
+
+        List<Row> updatedRows = new ArrayList<>();
+        for (Row row : rows) {
+            boolean passes = true;
+
+            if (whereCondition != null) {
+                passes = testRow(row, whereCondition, table.getColumns());
+            }
+
+            if (passes) {
+                // create new row with same values as current row, but with setColumnIndex value changed to setValue
+                List<Object> newRowValues = new ArrayList<>();
+                for (int i = 0; i < row.size(); i++) {
+                    if (i == setColumnIndex) {
+                        newRowValues.add(setValue);
+                    } else {
+                        newRowValues.add(row.getValue(i));
+                    }
+                }
+
+                updatedRows.add(new Row(newRowValues));
+            } else {
+                updatedRows.add(row);
+            }
+        }
+
+        int updatedCount = 0;
+        for (int i = 0; i < rows.size(); i++) {
+            if (!rows.get(i).equals(updatedRows.get(i))) {
+                updatedCount++;
+            }
+
+            rows.set(i, updatedRows.get(i));
+        }
+
+        String message = String.format("%d row(s) updated", updatedCount);
+
         return new QueryResult(new ArrayList<>(), message);
     }
 
