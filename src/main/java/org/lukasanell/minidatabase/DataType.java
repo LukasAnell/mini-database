@@ -1,3 +1,5 @@
+package org.lukasanell.minidatabase;
+
 /**
  * The DataType enum represents the different data types that can be used in the database
  *
