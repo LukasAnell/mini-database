@@ -1,3 +1,5 @@
+package org.lukasanell.minidatabase;
+
 import java.util.List;
 
 /**
