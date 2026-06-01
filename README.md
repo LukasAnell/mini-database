@@ -8,6 +8,11 @@ This is a small project that has served as practice implementing a relational da
 
 ---
 
+## Documentation
+Javadoc is available at [lukasanell.github.io/mini-database](https://lukasanell.github.io/mini-database)
+
+---
+
 ## Features
 
 - Typed columns (`INTEGER`, `DOUBLE`, `STRING`, `BOOLEAN`)
