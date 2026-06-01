@@ -26,6 +26,6 @@ jobs:
                   settings-path: ${{ github.workspace }}
 
             - name: Publish package with Maven
-              run: mvn --batch-mode deploy
+              run: mvn --batch-mode deploy -e
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
