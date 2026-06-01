@@ -264,10 +264,11 @@ public class QueryParser {
     }
 
     /**
+     * Handle UPDATE queries, both with or without WHERE conditions.
      *
-     * @param query
-     * @param table
-     * @return
+     * @param query The full UPDATE query string to be executed
+     * @param table The Table object the query is executed on
+     * @return a QueryResult object
      */
     private QueryResult caseUpdate(String query, Table table) {
         String queryUpper = query.toUpperCase();
