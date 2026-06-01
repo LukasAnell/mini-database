@@ -21,8 +21,6 @@ jobs:
                   java-version: "25"
                   distribution: "temurin"
                   server-id: github-pkg
-                  server-username: GITHUB_ACTOR
-                  server-password: GITHUB_TOKEN
                   settings-path: ${{ github.workspace }}
 
             - name: Publish package with Maven

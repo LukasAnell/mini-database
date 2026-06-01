@@ -15,7 +15,7 @@
         <repository>
             <id>github-pkg</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com</url>
+            <url>https://maven.pkg.github.com/lukasanell/mini-database</url>
         </repository>
     </distributionManagement>
 
