@@ -41,6 +41,15 @@ public class Row {
     }
 
     /**
+     * Get the list of values in the Row
+     *
+     * @return the list of values in the Row
+     */
+    public List<Object> getValues() {
+        return values;
+    }
+
+    /**
      * Set the value at the specified index in the Row
      *
      * @param index The index of the value to set

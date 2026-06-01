@@ -367,17 +367,11 @@ public class QueryParser {
             }
 
             if (passes) {
-                // create new row with same values as current row, but with setColumnIndex value changed to setValue
-                List<Object> newRowValues = new ArrayList<>();
-                for (int i = 0; i < row.size(); i++) {
-                    if (i == setColumnIndex) {
-                        newRowValues.add(setValue);
-                    } else {
-                        newRowValues.add(row.getValue(i));
-                    }
-                }
+                // build new row with value at setColumnIndex changed to setValue
+                List<Object> newValues = new ArrayList<>(row.getValues());
+                newValues.set(setColumnIndex, setValue);
 
-                updatedRows.add(new Row(newRowValues));
+                updatedRows.add(new Row(newValues));
             } else {
                 updatedRows.add(row);
             }
