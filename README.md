@@ -71,12 +71,12 @@ This is a small project that has served as practice implementing a relational da
 
 **Compile sources:**
 ```bash
-javac -cp lib/junit-platform-console-standalone-1.10.2.jar src/*.java -d bin/
+javac -cp lib/junit-platform-console-standalone-1.10.2.jar src/main/java/org/lukasanell/minidatabase/*.java -d bin/
 ```
 
 **Compile tests:**
 ```bash
-javac -cp lib/junit-platform-console-standalone-1.10.2.jar:bin/ test/*.java -d bin/
+javac -cp lib/junit-platform-console-standalone-1.10.2.jar:bin/ src/test/java/org/lukasanell/minidatabase/*.java -d bin/
 ```
 
 **Run tests:**
@@ -96,11 +96,6 @@ mvn compile
 **Run tests:**
 ```bash
 mvn test
-```
-
-**Run the main class:**
-```bash
-mvn exec:java -Dexec.mainClass="Main"
 ```
 
 ---
