@@ -27,8 +27,12 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <sourceDirectory>
+            src/main/java/org/lukasanell/minidatabase
+        </sourceDirectory>
+        <testSourceDirectory>
+            src/test/java/org/lukasanell/minidatabase
+        </testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
