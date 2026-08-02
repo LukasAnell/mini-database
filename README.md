@@ -31,27 +31,38 @@ Javadoc is available at [lukasanell.github.io/mini-database](https://lukasanell.
 ├── lib
 │   └── junit-platform-console-standalone-1.10.2.jar
 ├── src
-│   ├── Column.java
-│   ├── Condition.java
-│   ├── CsvStorage.java
-│   ├── DataType.java
-│   ├── HashIndex.java
-│   ├── QueryParser.java
-│   ├── QueryResult.java
-│   ├── Row.java
-│   ├── Table.java
-│   ├── Transaction.java
-│   ├── TreeIndex.java
-│   └── TypeMismatchException.java
-├── test
-│   ├── resources
-│   │   └── test_students.csv
-│   ├── CsvStorageTest.java
-│   ├── IndexTest.java
-│   ├── QueryParserTest.java
-│   ├── TableTest.java
-│   ├── TransactionTest.java
-│   └── TypeEnforcementTest.java
+│   ├── main
+│   │   ├── java
+│   │   │   └── org
+│   │   │       └── lukasanell
+│   │   │           └── minidatabase
+│   │   │               ├── Column.java
+│   │   │               ├── Condition.java
+│   │   │               ├── CsvStorage.java
+│   │   │               ├── DataType.java
+│   │   │               ├── HashIndex.java
+│   │   │               ├── QueryParser.java
+│   │   │               ├── QueryResult.java
+│   │   │               ├── Row.java
+│   │   │               ├── Table.java
+│   │   │               ├── Transaction.java
+│   │   │               ├── TreeIndex.java
+│   │   │               └── TypeMismatchException.java
+│   │   └── resources
+│   └── test
+│       ├── java
+│       │   └── org
+│       │       └── lukasanell
+│       │           └── minidatabase
+│       │               ├── CsvStorageTest.java
+│       │               ├── IndexTest.java
+│       │               ├── QueryParserTest.java
+│       │               ├── TableTest.java
+│       │               ├── TransactionTest.java
+│       │               ├── TypeEnforcementTest.java
+│       │               └── UpdateQueryTest.java
+│       └── resources
+│           └── test_students.csv
 ├── LICENSE
 ├── README.md
 └── pom.xml
@@ -65,12 +76,12 @@ Javadoc is available at [lukasanell.github.io/mini-database](https://lukasanell.
 
 **Compile sources:**
 ```bash
-javac -cp lib/junit-platform-console-standalone-1.10.2.jar src/*.java -d bin/
+javac -cp lib/junit-platform-console-standalone-1.10.2.jar src/main/java/org/lukasanell/minidatabase/*.java -d bin/
 ```
 
 **Compile tests:**
 ```bash
-javac -cp lib/junit-platform-console-standalone-1.10.2.jar:bin/ test/*.java -d bin/
+javac -cp lib/junit-platform-console-standalone-1.10.2.jar:bin/ src/test/java/org/lukasanell/minidatabase/*.java -d bin/
 ```
 
 **Run tests:**
@@ -90,11 +101,6 @@ mvn compile
 **Run tests:**
 ```bash
 mvn test
-```
-
-**Run the main class:**
-```bash
-mvn exec:java -Dexec.mainClass="Main"
 ```
 
 ---

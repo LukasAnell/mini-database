@@ -24,7 +24,7 @@ public class Row {
     /**
      * Create a Row with the given list of values
      *
-     * @param values The list of values in the Row, which correspond to the Column of the Table
+     * @param values The list of values in the Row
      */
     public Row(List<Object> values) {
         this.values = values;
@@ -33,11 +33,30 @@ public class Row {
     /**
      * Get the value at the specified index in the Row
      *
-     * @param index The index of the value to retrieve, which corresponds to the Column index in the Table
+     * @param index The index of the value to retrieve
      * @return the value at the specified index in the Row
      */
     public Object getValue(int index) {
         return values.get(index);
+    }
+
+    /**
+     * Get the list of values in the Row
+     *
+     * @return the list of values in the Row
+     */
+    public List<Object> getValues() {
+        return values;
+    }
+
+    /**
+     * Set the value at the specified index in the Row
+     *
+     * @param index The index of the value to set
+     * @param value The new value to set at the specified index in the Row
+     */
+    public void setValue(int index, Object value) {
+        values.set(index, value);
     }
 
     /**
@@ -61,6 +80,7 @@ public class Row {
             sb.append(values.get(i));
             if (i < values.size() - 1) sb.append(", ");
         }
+
         return sb.toString();
     }
 }
