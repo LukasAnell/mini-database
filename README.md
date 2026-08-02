@@ -17,7 +17,7 @@ Javadoc is available at [lukasanell.github.io/mini-database](https://lukasanell.
 
 - Typed columns (`INTEGER`, `DOUBLE`, `STRING`, `BOOLEAN`)
 - CSV saving and loading
-- SQL-like queries including: `SELECT`, `INSERT`, `DELETE`, with optional `WHERE` clauses
+- SQL-like queries including: `SELECT`, `INSERT`, `DELETE`, `UPDATE`, with optional `WHERE` clauses
 - Hash indexing for fast equality lookups
 - Tree indexing for sorted and range-based lookups
 - Transactions that support commits and rollbacks
@@ -127,6 +127,13 @@ DELETE FROM tableName
 DELETE FROM tableName WHERE column = value
 ```
 
+### UPDATE
+```sql
+UPDATE tableName SET column = value
+UPDATE tableName SET column = value WHERE column2 = value2
+```
+(Note: Right now, the table name in the query isn't validated against the target `Table` object. The query is always executed against whichever `Table` is passed to `execute()`.)
+
 **Notes:**
 - Keywords are case-insensitive, but values are case-sensitive
 - `WHERE` supports `=`, `<`, `>`
@@ -154,7 +161,6 @@ I thought a CSV would be the best for this because it's a simple plaintext repre
 
 ## Limitations
 
-- No `UPDATE` query
 - `WHERE` clauses currently only support a single condition
     - No `AND`, `OR`, or `NOT`
 - Values in queries and in CSV files cannot contain commas
@@ -165,7 +171,6 @@ I thought a CSV would be the best for this because it's a simple plaintext repre
 
 ## (Possible) Future Updates
 
-- Add `UPDATE` query support, along with undo logic in Transaction
 - Support compound `WHERE` conditions with `AND` and `OR`
     - `NOT` support also included
 - Persist each index type alongside the CSV files so they can survive restarts
