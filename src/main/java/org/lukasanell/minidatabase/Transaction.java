@@ -65,6 +65,12 @@ public class Transaction {
     public void executeQuery(String query, QueryParser parser) {
         String queryUpper = query.trim().toUpperCase();
 
+        if (queryUpper.startsWith("UPDATE")) {
+            // get the list of all rows that will be affected by this query
+            // build a HashMap that maps each affected row's new value to its old value
+            // build a new
+        }
+
         if (!queryUpper.startsWith("SELECT")) {
             // make copy of table's rows
             List<Row> snapshot = new ArrayList<>(this.table.getRows());

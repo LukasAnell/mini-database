@@ -15,6 +15,8 @@ import java.util.List;
  * - INSERT INTO tableName VALUES value1, value2, value3
  * - DELETE FROM tableName
  * - DELETE FROM tableName WHERE column1 = 'value'
+ * - UPDATE column1 SET value1 WHERE column2 = value2
+ * -
  *
  * Example usage:
  * {@snippet :
