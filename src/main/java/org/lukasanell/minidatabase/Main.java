@@ -37,8 +37,15 @@ public class Main {
                 break;
             }
 
-            // Parse the input and execute the query
-            parser.execute(input, table);
+            try {
+                // Parse the input and execute the query
+                QueryResult result = parser.execute(input, table);
+
+                // Print the result
+                System.out.println(result.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
     }
 }
