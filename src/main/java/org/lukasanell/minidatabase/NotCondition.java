@@ -24,14 +24,20 @@ public class NotCondition implements WhereClause {
     private WhereClause condition;
 
     /**
+     * Creates a NotCondition that negates the given condition.
      *
-     * @param condition
+     * @param condition The condition to be negated
      */
     public NotCondition(WhereClause condition) {
         this.condition = condition;
     }
 
     /**
+     * Tests whether the given Row satisfies the negated condition.
+     *
+     * @param row The Row to test against the negated condition
+     * @param columns The Table's column definitions, used to resolve the name to its index
+     * @return true if the Row does not satisfy the original condition, false otherwise
      */
     @Override
     public boolean test(Row row, List<Column> columns) {
@@ -39,16 +45,18 @@ public class NotCondition implements WhereClause {
     }
 
     /**
+     * Get the condition that is being negated.
      *
-     * @return
+     * @return the condition that is being negated
      */
     public WhereClause getCondition() {
         return condition;
     }
 
     /**
+     * Set the condition that is being negated.
      *
-     * @param condition
+     * @param condition the condition to be negated
      */
     public void setCondition(WhereClause condition) {
         this.condition = condition;
