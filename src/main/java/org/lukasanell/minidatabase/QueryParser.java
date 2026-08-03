@@ -402,10 +402,22 @@ public class QueryParser {
     private Condition getWhereCondition(String query) {
         // condition structure: colName op value
 
-        // get substring of only condition
-        String conditionStr = query.substring(
-            query.toUpperCase().indexOf("WHERE") + 5
-        );
+    /**
+     * Parse a condition segment (e.g., "column1 > 5") into a Condition object, handling NOT conditions as well.
+     *
+     * @param segment The condition segment string to be parsed
+     * @return a WhereClause object representing the parsed condition, which can be a Condition or NotCondition
+     */
+    private WhereClause parseCondition(String segment) {
+        String conditionStr = segment;
+
+        // check for NOT
+        boolean isNot = false;
+        if (segment.toUpperCase().startsWith("NOT ")) {
+            // parse the inner condition after NOT
+            conditionStr = segment.substring(3).trim();
+            isNot = true;
+        }
 
         // check which operator there is
         String operator;
@@ -413,14 +425,28 @@ public class QueryParser {
             operator = "=";
         } else if (conditionStr.contains(">")) {
             operator = ">";
-        } else {
+        } else if (conditionStr.contains("<")) {
             operator = "<";
+        } else {
+            throw new IllegalArgumentException(
+                "Invalid operator in condition: " + conditionStr
+            );
         }
 
         // get colName and value
         String[] values = conditionStr.split("\\" + operator);
+        Condition condition = new Condition(
+            values[0].strip(),
+            operator,
+            values[1].strip()
+        );
 
-        return new Condition(values[0].strip(), operator, values[1].strip());
+        // if isNot, wrap the condition in a NotCondition
+        if (isNot) {
+            return new NotCondition(condition);
+        } else {
+            return condition;
+        }
     }
 
     /**
