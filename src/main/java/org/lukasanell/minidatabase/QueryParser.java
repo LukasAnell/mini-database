@@ -394,13 +394,56 @@ public class QueryParser {
     }
 
     /**
-     * Parse the WHERE condition from the query string and return it as a Condition object.
      *
-     * @param query The full query string containing the WHERE condition
-     * @return a Condition object representing the parsed WHERE condition
+     * @param query
+     * @return
      */
-    private Condition getWhereCondition(String query) {
-        // condition structure: colName op value
+    private WhereClause getWhereCondition(String query) {
+        String whereStr = query
+            .substring(query.toUpperCase().indexOf("WHERE") + 5)
+            .trim();
+
+        String whereStrUpper = whereStr.toUpperCase();
+
+        boolean hasAnd = whereStrUpper.contains(" AND ");
+        boolean hasOr = whereStrUpper.contains(" OR ");
+
+        if (hasAnd && hasOr) {
+            throw new IllegalArgumentException(
+                "Cannot mix AND and OR in WHERE clause"
+            );
+        }
+
+        if (hasAnd) {
+            String[] parts = whereStr.split("(?i)\\s+AND\\s+");
+            WhereClause condition = parseCondition(parts[0]);
+
+            for (int i = 1; i < parts.length; i++) {
+                condition = new CompoundCondition(
+                    condition,
+                    "AND",
+                    parseCondition(parts[i])
+                );
+            }
+
+            return condition;
+        } else if (hasOr) {
+            String[] parts = whereStr.split("(?i)\\s+OR\\s+");
+            WhereClause condition = parseCondition(parts[0]);
+
+            for (int i = 1; i < parts.length; i++) {
+                condition = new CompoundCondition(
+                    condition,
+                    "OR",
+                    parseCondition(parts[i])
+                );
+            }
+
+            return condition;
+        } else {
+            return parseCondition(whereStr);
+        }
+    }
 
     /**
      * Parse a condition segment (e.g., "column1 > 5") into a Condition object, handling NOT conditions as well.
@@ -491,8 +534,10 @@ public class QueryParser {
 
         // check if rowValue and conditionValueCasted can be Compared
         if (
-            !(rowValue instanceof Comparable &&
-                conditionValueCasted instanceof Comparable)
+            !(
+                rowValue instanceof Comparable &&
+                conditionValueCasted instanceof Comparable
+            )
         ) {
             return false;
         }
