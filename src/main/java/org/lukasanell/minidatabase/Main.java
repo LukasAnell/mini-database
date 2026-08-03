@@ -43,6 +43,17 @@ public class Main {
 
                 // If the result has rows, print them
                 if (result.getRows() != null && !result.getRows().isEmpty()) {
+                    if (
+                        result.getRows().get(0).size() ==
+                        table.getColumns().size()
+                    ) {
+                        // Print the column names
+                        for (Column column : table.getColumns()) {
+                            System.out.print(column.getName() + "\t");
+                        }
+                        System.out.println();
+                    }
+
                     for (Row row : result.getRows()) {
                         System.out.println(row);
                     }
