@@ -8,6 +8,18 @@ import java.util.List;
  * Implemented by Condition, NotCondition, and CompoundCondition classes to provide different types of filtering logic.
  * This structure is so QueryParser can treat every type of condition the same way
  *
+ * Example usage:
+ * {@snippet :
+ * public class Condition implements WhereClause {
+ *      ...
+ *
+ *      @Override
+ *      public boolean test(Row row, List<Column> columns) {
+ *          // Implementation of the test method to check if the row satisfies the condition
+ *      }
+ * }
+ * }
+ *
  * @author LukasAnell
  * @version 1.0
  * @since 2026.08.03
