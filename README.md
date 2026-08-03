@@ -37,17 +37,20 @@ Javadoc is available at [lukasanell.github.io/mini-database](https://lukasanell.
 │   │   │       └── lukasanell
 │   │   │           └── minidatabase
 │   │   │               ├── Column.java
+│   │   │               ├── CompoundCondition.java
 │   │   │               ├── Condition.java
 │   │   │               ├── CsvStorage.java
 │   │   │               ├── DataType.java
 │   │   │               ├── HashIndex.java
+│   │   │               ├── NotCondition.java
 │   │   │               ├── QueryParser.java
 │   │   │               ├── QueryResult.java
 │   │   │               ├── Row.java
 │   │   │               ├── Table.java
 │   │   │               ├── Transaction.java
 │   │   │               ├── TreeIndex.java
-│   │   │               └── TypeMismatchException.java
+│   │   │               ├── TypeMismatchException.java
+│   │   │               └── WhereClause.java
 │   │   └── resources
 │   └── test
 │       ├── java
@@ -60,7 +63,8 @@ Javadoc is available at [lukasanell.github.io/mini-database](https://lukasanell.
 │       │               ├── TableTest.java
 │       │               ├── TransactionTest.java
 │       │               ├── TypeEnforcementTest.java
-│       │               └── UpdateQueryTest.java
+│       │               ├── UpdateQueryTest.java
+│       │               └── WhereClauseTest.java
 │       └── resources
 │           └── test_students.csv
 ├── LICENSE
