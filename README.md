@@ -17,7 +17,7 @@ Javadoc is available at [lukasanell.github.io/mini-database](https://lukasanell.
 
 - Typed columns (`INTEGER`, `DOUBLE`, `STRING`, `BOOLEAN`)
 - CSV saving and loading
-- SQL-like queries including: `SELECT`, `INSERT`, `DELETE`, `UPDATE`, with optional `WHERE` clauses
+- SQL-like queries including: `SELECT`, `INSERT`, `DELETE`, `UPDATE`, with optional `WHERE` clauses (including `AND`/`OR`/`NOT`)
 - Hash indexing for fast equality lookups
 - Tree indexing for sorted and range-based lookups
 - Transactions that support commits and rollbacks
@@ -114,7 +114,14 @@ SELECT col1, col2 FROM tableName
 SELECT * FROM tableName WHERE column = value
 SELECT * FROM tableName WHERE column > value
 SELECT * FROM tableName WHERE column < value
+SELECT * FROM tableName WHERE column1 = value1 AND column2 = value2
+SELECT * FROM tableName WHERE column1 = value1 OR column2 = value2
+SELECT * FROM tableName WHERE NOT column = value
 ```
+
+`WHERE` clauses also work the same way for `DELETE` and `UPDATE` (see below).
+
+`AND` and `OR` chains can be any length (`a = 1 AND b = 2 AND c = 3`), and `NOT` can prefix any individual condition in a chain (`NOT a = 1 AND b = 2`). **Mixing `AND` and `OR` in the same `WHERE` clause is currently not supported** and will throw an `IllegalArgumentException`.
 
 ### INSERT
 ```sql
@@ -139,6 +146,7 @@ UPDATE tableName SET column = value WHERE column2 = value2
 - `WHERE` supports `=`, `<`, `>`
     - Numeric comparisons can be used for `INTEGER` and `DOUBLE`
     - For `STRING` and `BOOLEAN`, only equality can be used
+- `WHERE` supports chaining conditions with `AND` or `OR` (not both in the same clause), and negating any single condition with `NOT`
 - Column values must not contain commas
 
 ---
@@ -161,8 +169,7 @@ I thought a CSV would be the best for this because it's a simple plaintext repre
 
 ## Limitations
 
-- `WHERE` clauses currently only support a single condition
-    - No `AND`, `OR`, or `NOT`
+- `WHERE` clauses support `AND`, `OR`, and `NOT`, but not both `AND` and `OR` in the same clause. Mixing them throws an `IllegalArgumentException`. Use one or the other per query for now.
 - Values in queries and in CSV files cannot contain commas
 - Indexes will not be written to disk for persistence, and must be rebuilt after loading a table from a CSV
 - No support for `NULL` values
@@ -171,8 +178,7 @@ I thought a CSV would be the best for this because it's a simple plaintext repre
 
 ## (Possible) Future Updates
 
-- Support compound `WHERE` conditions with `AND` and `OR`
-    - `NOT` support also included
+- Support parentheses and mixed `AND`/`OR` precedence in `WHERE` clauses
 - Persist each index type alongside the CSV files so they can survive restarts
 - Add an interactive shell so the database can be queried from the command line
 - Support multiple tables with `JOIN` queries
