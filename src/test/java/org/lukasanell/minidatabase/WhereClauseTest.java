@@ -76,10 +76,10 @@ public class WhereClauseTest {
     @Test
     void testAndExcludesNonMatchingRows() {
         QueryResult result = parser.execute(
-            "SELECT * FROM students WHERE gpa > 3.5 AND active = false",
+            "SELECT * FROM students WHERE gpa > 3.8 AND active = false",
             students
         );
-        // nobody has gpa > 3.5 AND active = false
+        // nobody has gpa > 3.8 AND active = false (Carol is 3.7, Dave is 2.9)
         assertEquals(0, result.getRows().size());
     }
 
