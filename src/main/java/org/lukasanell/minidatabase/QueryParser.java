@@ -409,13 +409,13 @@ public class QueryParser {
      * @return a WhereClause object representing the parsed condition, which can be a Condition or NotCondition
      */
     private WhereClause parseCondition(String segment) {
-        String conditionStr = segment;
+        String conditionStr = segment.trim();
 
         // check for NOT
         boolean isNot = false;
-        if (segment.toUpperCase().startsWith("NOT ")) {
+        if (conditionStr.toUpperCase().startsWith("NOT ")) {
             // parse the inner condition after NOT
-            conditionStr = segment.substring(3).trim();
+            conditionStr = conditionStr.substring(3).trim();
             isNot = true;
         }
 
