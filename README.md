@@ -22,6 +22,7 @@ Javadoc is available at [lukasanell.github.io/mini-database](https://lukasanell.
 - Tree indexing for sorted and range-based lookups
 - Transactions that support commits and rollbacks
 - Type enforcement on INSERT
+- Interactive REPL for querying a table directly from the command line
 
 ## Project Structure
 
@@ -42,6 +43,7 @@ Javadoc is available at [lukasanell.github.io/mini-database](https://lukasanell.
 │   │   │               ├── CsvStorage.java
 │   │   │               ├── DataType.java
 │   │   │               ├── HashIndex.java
+│   │   │               ├── Main.java
 │   │   │               ├── NotCondition.java
 │   │   │               ├── QueryParser.java
 │   │   │               ├── QueryResult.java
@@ -88,6 +90,11 @@ javac -cp lib/junit-platform-console-standalone-1.10.2.jar src/main/java/org/luk
 javac -cp lib/junit-platform-console-standalone-1.10.2.jar:bin/ src/test/java/org/lukasanell/minidatabase/*.java -d bin/
 ```
 
+**Run the interactive REPL:**
+```bash
+java -cp bin/ org.lukasanell.minidatabase.Main
+```
+
 **Run tests:**
 ```bash
 java -jar lib/junit-platform-console-standalone-1.10.2.jar --class-path bin/ --scan-class-path
@@ -101,6 +108,12 @@ java -jar lib/junit-platform-console-standalone-1.10.2.jar --class-path bin/ --s
 ```bash
 mvn compile
 ```
+
+**Run the interactive REPL:**
+```bash
+mvn exec:java -Dexec.mainClass="org.lukasanell.minidatabase.Main"
+```
+This starts a prompt where you can type queries directly (`SELECT`, `INSERT`, `DELETE`, `UPDATE`) against a single in-memory table. Type `exit` or `quit` to end the session. The table starts empty, so `INSERT` some rows first. Malformed queries print an error and don't end the session. The demo table is hardcoded in `Main.java` and doesn't support `LOAD`/`SAVE` or transactions yet.
 
 **Run tests:**
 ```bash
@@ -157,6 +170,9 @@ UPDATE tableName SET column = value WHERE column2 = value2
 
 ## Design Decisions
 
+**Word-boundary-safe keyword parsing** \
+`QueryParser` originally detected keywords like `WHERE`, `FROM`, and `SET` with plain `String.contains()`/`indexOf()`, which breaks the moment a table or column name contains the keyword as a substring (e.g. a table named `nowhere` would be misread as having a `WHERE` clause). I added a small `indexOfKeyword()` helper using a `\bKEYWORD\b` regex and use it everywhere a keyword's position needs to be found, so keywords are only ever matched as whole words.
+
 **Snapshot-based undo log for Transaction** \
 Initially, I had logic to store inverse queries as Strings or some other operation that would reverse the given operation. However, my implementation was way too complex (in my opinion), so the current implementation simply captures a snapshot of the table's row list before a given change as a `Runnable` lambda. When a rollback is called, they're replayed in reverse order. I think this simpler, but much more memory intensive implementation is much easier for now and doesn't rely on the query parser.
 
@@ -177,6 +193,8 @@ I thought a CSV would be the best for this because it's a simple plaintext repre
 - Values in queries and in CSV files cannot contain commas
 - Indexes will not be written to disk for persistence, and must be rebuilt after loading a table from a CSV
 - No support for `NULL` values
+- The REPL only supports a single in-memory table, seeded empty — there's no `LOAD`/`SAVE` or multi-table support yet
+- The REPL doesn't print a column header for projected `SELECT`s (e.g. `SELECT id, name`), since `Row` doesn't carry its own column names — only full-width results (`SELECT *`, or `INSERT`/`DELETE`/`UPDATE`) get a header
 
 ---
 
@@ -184,5 +202,5 @@ I thought a CSV would be the best for this because it's a simple plaintext repre
 
 - Support parentheses and mixed `AND`/`OR` precedence in `WHERE` clauses
 - Persist each index type alongside the CSV files so they can survive restarts
-- Add an interactive shell so the database can be queried from the command line
+- Wire `LOAD`/`SAVE` (via `CsvStorage`) and `BEGIN`/`COMMIT`/`ROLLBACK` (via `Transaction`) into the REPL. Currently, the REPL only supports direct queries against a single in-memory table
 - Support multiple tables with `JOIN` queries
