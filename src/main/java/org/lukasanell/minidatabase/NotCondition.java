@@ -52,13 +52,4 @@ public class NotCondition implements WhereClause {
     public WhereClause getCondition() {
         return condition;
     }
-
-    /**
-     * Set the condition that is being negated.
-     *
-     * @param condition the condition to be negated
-     */
-    public void setCondition(WhereClause condition) {
-        this.condition = condition;
-    }
 }
