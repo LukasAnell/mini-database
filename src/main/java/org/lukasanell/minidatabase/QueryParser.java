@@ -394,9 +394,10 @@ public class QueryParser {
     }
 
     /**
+     * Parse the WHERE clause of a query into a WhereClause object, which can be a Condition, NotCondition, or CompoundCondition.
      *
-     * @param query
-     * @return
+     * @param query The full query string containing the WHERE clause
+     * @return a WhereClause object representing the parsed WHERE condition
      */
     private WhereClause getWhereCondition(String query) {
         String whereStr = query
