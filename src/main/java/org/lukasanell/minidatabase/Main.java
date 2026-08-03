@@ -41,10 +41,22 @@ public class Main {
                 // Parse the input and execute the query
                 QueryResult result = parser.execute(input, table);
 
+                // If the result has rows, print them
+                if (result.getRows() != null && !result.getRows().isEmpty()) {
+                    for (Row row : result.getRows()) {
+                        System.out.println(row);
+                    }
+                }
+
                 // Print the result
                 System.out.println(result.getMessage());
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                String errorMessage =
+                    e.getMessage() != null
+                        ? e.getMessage()
+                        : e.getClass().getSimpleName();
+
+                System.out.println("Error: " + errorMessage);
             }
         }
     }
