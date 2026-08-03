@@ -2,6 +2,8 @@ package org.lukasanell.minidatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A class that parses and executes SQL-like queries on a given Table object
@@ -60,7 +62,9 @@ public class QueryParser {
                 return caseUpdate(query, table);
             default:
                 // malformed query
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(
+                    "Unrecognized query type: " + query
+                );
         }
     }
 
@@ -76,16 +80,18 @@ public class QueryParser {
         String queryUpper = query.toUpperCase();
 
         // does WHERE exist?
-        boolean hasWhere = queryUpper.contains("WHERE");
+        boolean hasWhere = indexOfKeyword(queryUpper, "WHERE") != -1;
 
-        if (!queryUpper.contains("FROM")) {
-            throw new IllegalArgumentException();
+        if (indexOfKeyword(queryUpper, "FROM") == -1) {
+            throw new IllegalArgumentException(
+                "SELECT query missing FROM clause: " + query
+            );
         }
 
         // get column list
         // (between SELECT and FROM)
         String columnListStr = query
-            .substring(6, queryUpper.indexOf("FROM") - 1)
+            .substring(6, indexOfKeyword(queryUpper, "FROM") - 1)
             .trim();
 
         String[] columnList = { "*" };
@@ -225,7 +231,7 @@ public class QueryParser {
         String queryUpper = query.toUpperCase();
 
         // does WHERE exist?
-        boolean hasWhere = queryUpper.contains("WHERE");
+        boolean hasWhere = indexOfKeyword(queryUpper, "WHERE") != -1;
 
         // if hasWhere, turn it into a condition object
         WhereClause whereCondition = null;
@@ -275,7 +281,7 @@ public class QueryParser {
     private QueryResult caseUpdate(String query, Table table) {
         String queryUpper = query.toUpperCase();
 
-        boolean hasWhere = queryUpper.contains("WHERE");
+        boolean hasWhere = indexOfKeyword(queryUpper, "WHERE") != -1;
 
         WhereClause whereCondition = null;
         if (hasWhere) {
@@ -289,15 +295,17 @@ public class QueryParser {
         String setStr = hasWhere
             ? query
                   .substring(
-                      queryUpper.indexOf("SET") + 3,
-                      queryUpper.indexOf("WHERE")
+                      indexOfKeyword(queryUpper, "SET") + 3,
+                      indexOfKeyword(queryUpper, "WHERE")
                   )
                   .trim()
-            : query.substring(queryUpper.indexOf("SET") + 3).trim();
+            : query.substring(indexOfKeyword(queryUpper, "SET") + 3).trim();
 
         String[] setParts = setStr.split("=");
         if (setParts.length != 2) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                "Malformed SET clause, expected 'column = value': " + setStr
+            );
         }
 
         String setColumnName = setParts[0].trim();
@@ -316,7 +324,9 @@ public class QueryParser {
         }
 
         if (setColumnIndex == -1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                "Column not found: " + setColumnName
+            );
         }
 
         // convert setValueStr to setColumnType
@@ -394,6 +404,22 @@ public class QueryParser {
     }
 
     /**
+     * Find the index of the first whole-word occurrence of a keyword in a string.
+     * Regex word boundaries are used so a keyword embedded inside a longer word is not mistaken for the keyword.
+     *
+     * @param textUpper The (uppercased) text to search
+     * @param keyword The keyword to search for (also uppercased)
+     * @return the index of the first whole-word match, or -1 if the keyword is not present as a whole word
+     */
+    private int indexOfKeyword(String textUpper, String keyword) {
+        Matcher matcher = Pattern.compile("\\b" + keyword + "\\b").matcher(
+            textUpper
+        );
+
+        return matcher.find() ? matcher.start() : -1;
+    }
+
+    /**
      * Parse the WHERE clause of a query into a WhereClause object, which can be a Condition, NotCondition, or CompoundCondition.
      *
      * @param query The full query string containing the WHERE clause
@@ -401,7 +427,7 @@ public class QueryParser {
      */
     private WhereClause getWhereCondition(String query) {
         String whereStr = query
-            .substring(query.toUpperCase().indexOf("WHERE") + 5)
+            .substring(indexOfKeyword(query.toUpperCase(), "WHERE") + 5)
             .trim();
 
         String whereStrUpper = whereStr.toUpperCase();
