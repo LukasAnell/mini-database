@@ -94,7 +94,7 @@ public class QueryParser {
         }
 
         // if hasWhere, turn it into a condition object
-        Condition whereCondition = null;
+        WhereClause whereCondition = null;
         if (hasWhere) {
             whereCondition = getWhereCondition(query);
         }
@@ -228,7 +228,7 @@ public class QueryParser {
         boolean hasWhere = queryUpper.contains("WHERE");
 
         // if hasWhere, turn it into a condition object
-        Condition whereCondition = null;
+        WhereClause whereCondition = null;
         if (hasWhere) {
             whereCondition = getWhereCondition(query);
         }
@@ -277,7 +277,7 @@ public class QueryParser {
 
         boolean hasWhere = queryUpper.contains("WHERE");
 
-        Condition whereCondition = null;
+        WhereClause whereCondition = null;
         if (hasWhere) {
             whereCondition = getWhereCondition(query);
         }
@@ -394,18 +394,74 @@ public class QueryParser {
     }
 
     /**
-     * Parse the WHERE condition from the query string and return it as a Condition object.
+     * Parse the WHERE clause of a query into a WhereClause object, which can be a Condition, NotCondition, or CompoundCondition.
      *
-     * @param query The full query string containing the WHERE condition
-     * @return a Condition object representing the parsed WHERE condition
+     * @param query The full query string containing the WHERE clause
+     * @return a WhereClause object representing the parsed WHERE condition
      */
-    private Condition getWhereCondition(String query) {
-        // condition structure: colName op value
+    private WhereClause getWhereCondition(String query) {
+        String whereStr = query
+            .substring(query.toUpperCase().indexOf("WHERE") + 5)
+            .trim();
 
-        // get substring of only condition
-        String conditionStr = query.substring(
-            query.toUpperCase().indexOf("WHERE") + 5
-        );
+        String whereStrUpper = whereStr.toUpperCase();
+
+        boolean hasAnd = whereStrUpper.contains(" AND ");
+        boolean hasOr = whereStrUpper.contains(" OR ");
+
+        if (hasAnd && hasOr) {
+            throw new IllegalArgumentException(
+                "Cannot mix AND and OR in WHERE clause"
+            );
+        }
+
+        if (hasAnd) {
+            String[] parts = whereStr.split("(?i)\\s+AND\\s+");
+            WhereClause condition = parseCondition(parts[0]);
+
+            for (int i = 1; i < parts.length; i++) {
+                condition = new CompoundCondition(
+                    condition,
+                    "AND",
+                    parseCondition(parts[i])
+                );
+            }
+
+            return condition;
+        } else if (hasOr) {
+            String[] parts = whereStr.split("(?i)\\s+OR\\s+");
+            WhereClause condition = parseCondition(parts[0]);
+
+            for (int i = 1; i < parts.length; i++) {
+                condition = new CompoundCondition(
+                    condition,
+                    "OR",
+                    parseCondition(parts[i])
+                );
+            }
+
+            return condition;
+        } else {
+            return parseCondition(whereStr);
+        }
+    }
+
+    /**
+     * Parse a condition segment (e.g., "column1 > 5") into a Condition object, handling NOT conditions as well.
+     *
+     * @param segment The condition segment string to be parsed
+     * @return a WhereClause object representing the parsed condition, which can be a Condition or NotCondition
+     */
+    private WhereClause parseCondition(String segment) {
+        String conditionStr = segment.trim();
+
+        // check for NOT
+        boolean isNot = false;
+        if (conditionStr.toUpperCase().startsWith("NOT ")) {
+            // parse the inner condition after NOT
+            conditionStr = conditionStr.substring(3).trim();
+            isNot = true;
+        }
 
         // check which operator there is
         String operator;
@@ -413,82 +469,44 @@ public class QueryParser {
             operator = "=";
         } else if (conditionStr.contains(">")) {
             operator = ">";
-        } else {
+        } else if (conditionStr.contains("<")) {
             operator = "<";
+        } else {
+            throw new IllegalArgumentException(
+                "Invalid operator in condition: " + conditionStr
+            );
         }
 
         // get colName and value
         String[] values = conditionStr.split("\\" + operator);
+        Condition condition = new Condition(
+            values[0].strip(),
+            operator,
+            values[1].strip()
+        );
 
-        return new Condition(values[0].strip(), operator, values[1].strip());
+        // if isNot, wrap the condition in a NotCondition
+        if (isNot) {
+            return new NotCondition(condition);
+        } else {
+            return condition;
+        }
     }
 
     /**
-     * Test if a given Row satisfies a given Condition, based on the column definitions in the table.
+     * Test if a given Row satisfies a given WhereClause, based on the column definitions in the table.
      *
-     * @param row The Row to be tested against the condition
-     * @param condition The Condition object representing the condition to test against
+     * @param row The Row to be tested against the where clause
+     * @param whereClause The WhereClause object representing the where clause to test against
      * @param columns The list of Column objects representing the table's column definitions (used to determine data types and column indices)
-     * @return true if the Row satisfies the Condition, false otherwise
+     * @return true if the Row satisfies the WhereClause, false otherwise
      */
     private boolean testRow(
         Row row,
-        Condition condition,
+        WhereClause whereClause,
         List<Column> columns
     ) {
-        // find which column index matches condition's colName
-        int index = -1;
-        for (int i = 0; i < columns.size(); i++) {
-            if (condition.getColumnName().equals(columns.get(i).getName())) {
-                index = i;
-                break;
-            }
-        }
-
-        if (index == -1) {
-            throw new IllegalArgumentException();
-        }
-
-        // get value from row at index
-        Object rowValue = row.getValue(index);
-
-        DataType type = columns.get(index).getType();
-        String conditionValueStr = condition.getValue();
-
-        // convert value to DataType
-        Object conditionValueCasted = switch (type) {
-            case STRING -> conditionValueStr;
-            case INTEGER -> Integer.parseInt(conditionValueStr);
-            case DOUBLE -> Double.parseDouble(conditionValueStr);
-            case BOOLEAN -> Boolean.parseBoolean(conditionValueStr);
-        };
-
-        // check if rowValue and conditionValueCasted can be Compared
-        if (
-            !(rowValue instanceof Comparable &&
-                conditionValueCasted instanceof Comparable)
-        ) {
-            return false;
-        }
-
-        // create Comparable version of rowValue, to be used when comparing with =, >, <
-        @SuppressWarnings("unchecked")
-        Comparable<Object> c1 = (Comparable<Object>) rowValue;
-
-        // compare using =, >, <
-        // (for STRING and BOOLEAN, only use =)
-        if (type == DataType.INTEGER || type == DataType.DOUBLE) {
-            // compare with >, <
-            switch (condition.getOperator()) {
-                case ">":
-                    return c1.compareTo(conditionValueCasted) > 0;
-                case "<":
-                    return c1.compareTo(conditionValueCasted) < 0;
-            }
-        }
-
-        // compare with =
-        return c1.compareTo(conditionValueCasted) == 0;
+        return whereClause.test(row, columns);
     }
 
     /**
