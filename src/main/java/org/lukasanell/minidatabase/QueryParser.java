@@ -94,7 +94,7 @@ public class QueryParser {
         }
 
         // if hasWhere, turn it into a condition object
-        Condition whereCondition = null;
+        WhereClause whereCondition = null;
         if (hasWhere) {
             whereCondition = getWhereCondition(query);
         }
@@ -228,7 +228,7 @@ public class QueryParser {
         boolean hasWhere = queryUpper.contains("WHERE");
 
         // if hasWhere, turn it into a condition object
-        Condition whereCondition = null;
+        WhereClause whereCondition = null;
         if (hasWhere) {
             whereCondition = getWhereCondition(query);
         }
@@ -277,7 +277,7 @@ public class QueryParser {
 
         boolean hasWhere = queryUpper.contains("WHERE");
 
-        Condition whereCondition = null;
+        WhereClause whereCondition = null;
         if (hasWhere) {
             whereCondition = getWhereCondition(query);
         }
@@ -503,64 +503,10 @@ public class QueryParser {
      */
     private boolean testRow(
         Row row,
-        Condition condition,
+        WhereClause condition,
         List<Column> columns
     ) {
-        // find which column index matches condition's colName
-        int index = -1;
-        for (int i = 0; i < columns.size(); i++) {
-            if (condition.getColumnName().equals(columns.get(i).getName())) {
-                index = i;
-                break;
-            }
-        }
-
-        if (index == -1) {
-            throw new IllegalArgumentException();
-        }
-
-        // get value from row at index
-        Object rowValue = row.getValue(index);
-
-        DataType type = columns.get(index).getType();
-        String conditionValueStr = condition.getValue();
-
-        // convert value to DataType
-        Object conditionValueCasted = switch (type) {
-            case STRING -> conditionValueStr;
-            case INTEGER -> Integer.parseInt(conditionValueStr);
-            case DOUBLE -> Double.parseDouble(conditionValueStr);
-            case BOOLEAN -> Boolean.parseBoolean(conditionValueStr);
-        };
-
-        // check if rowValue and conditionValueCasted can be Compared
-        if (
-            !(
-                rowValue instanceof Comparable &&
-                conditionValueCasted instanceof Comparable
-            )
-        ) {
-            return false;
-        }
-
-        // create Comparable version of rowValue, to be used when comparing with =, >, <
-        @SuppressWarnings("unchecked")
-        Comparable<Object> c1 = (Comparable<Object>) rowValue;
-
-        // compare using =, >, <
-        // (for STRING and BOOLEAN, only use =)
-        if (type == DataType.INTEGER || type == DataType.DOUBLE) {
-            // compare with >, <
-            switch (condition.getOperator()) {
-                case ">":
-                    return c1.compareTo(conditionValueCasted) > 0;
-                case "<":
-                    return c1.compareTo(conditionValueCasted) < 0;
-            }
-        }
-
-        // compare with =
-        return c1.compareTo(conditionValueCasted) == 0;
+        return condition.test(row, columns);
     }
 
     /**
