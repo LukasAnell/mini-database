@@ -56,7 +56,9 @@ public class Condition implements WhereClause {
         }
 
         if (index == -1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                "Column not found: " + this.columnName
+            );
         }
 
         // get value from row at index

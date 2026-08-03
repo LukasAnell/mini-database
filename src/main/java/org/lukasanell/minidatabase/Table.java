@@ -73,7 +73,13 @@ public class Table {
      */
     public void addRow(Row row) {
         if (row.size() != columns.size()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                "Row size (" +
+                    row.size() +
+                    ") does not match number of columns (" +
+                    columns.size() +
+                    ")"
+            );
         }
 
         for (int i = 0; i < row.size(); i++) {

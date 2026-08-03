@@ -60,7 +60,9 @@ public class QueryParser {
                 return caseUpdate(query, table);
             default:
                 // malformed query
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(
+                    "Unrecognized query type: " + query
+                );
         }
     }
 
@@ -79,7 +81,9 @@ public class QueryParser {
         boolean hasWhere = queryUpper.contains("WHERE");
 
         if (!queryUpper.contains("FROM")) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                "SELECT query missing FROM clause: " + query
+            );
         }
 
         // get column list
@@ -297,7 +301,9 @@ public class QueryParser {
 
         String[] setParts = setStr.split("=");
         if (setParts.length != 2) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                "Malformed SET clause, expected 'column = value': " + setStr
+            );
         }
 
         String setColumnName = setParts[0].trim();
@@ -316,7 +322,9 @@ public class QueryParser {
         }
 
         if (setColumnIndex == -1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                "Column not found: " + setColumnName
+            );
         }
 
         // convert setValueStr to setColumnType
