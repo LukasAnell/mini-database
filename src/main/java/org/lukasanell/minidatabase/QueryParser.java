@@ -494,19 +494,19 @@ public class QueryParser {
     }
 
     /**
-     * Test if a given Row satisfies a given Condition, based on the column definitions in the table.
+     * Test if a given Row satisfies a given WhereClause, based on the column definitions in the table.
      *
-     * @param row The Row to be tested against the condition
-     * @param condition The Condition object representing the condition to test against
+     * @param row The Row to be tested against the where clause
+     * @param whereClause The WhereClause object representing the where clause to test against
      * @param columns The list of Column objects representing the table's column definitions (used to determine data types and column indices)
-     * @return true if the Row satisfies the Condition, false otherwise
+     * @return true if the Row satisfies the WhereClause, false otherwise
      */
     private boolean testRow(
         Row row,
-        WhereClause condition,
+        WhereClause whereClause,
         List<Column> columns
     ) {
-        return condition.test(row, columns);
+        return whereClause.test(row, columns);
     }
 
     /**
